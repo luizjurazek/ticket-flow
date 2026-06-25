@@ -21,14 +21,7 @@ export class PrismaUserRepository implements IUserRepository {
       },
     });
 
-    return new User(
-      createdUser.name,
-      createdUser.email,
-      createdUser.id,
-      [],
-      createdUser.createdAt,
-      createdUser.updatedAt
-    );
+    return new User(createdUser);
   }
 
   async update(user: User): Promise<User> {
@@ -41,14 +34,13 @@ export class PrismaUserRepository implements IUserRepository {
       },
     });
 
-    return new User(
-      updatedUser.name,
-      updatedUser.email,
-      updatedUser.id,
-      [],
-      updatedUser.createdAt,
-      updatedUser.updatedAt
-    );
+    return new User({
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      createdAt: updatedUser.createdAt,
+      updatedAt: updatedUser.updatedAt
+    });
   }
 
   async delete(id: string): Promise<void> {
@@ -91,13 +83,6 @@ export class PrismaUserRepository implements IUserRepository {
       t.updatedAt
     ));
 
-    return new User(
-      prismaUser.name,
-      prismaUser.email,
-      prismaUser.id,
-      tickets,
-      prismaUser.createdAt,
-      prismaUser.updatedAt
-    );
+    return new User(prismaUser);
   }
 }

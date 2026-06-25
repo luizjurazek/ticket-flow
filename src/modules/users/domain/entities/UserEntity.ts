@@ -6,23 +6,34 @@ export interface ICreateUserData {
   email: string;
 }
 
-export class User {
-  constructor(
-    public name: string,
-    public email: string,
-    public id: string = uuidv4(),
-    public tickets: Ticket[] = [],
-    public createdAt: Date = new Date(),
-    public updatedAt: Date = new Date(),
-  ) {}
+export interface IUpdateUserData {
+  name?: string;
+  email?: string;
+}
 
+export class User {
+  public name: string;
+  public email: string;
+  public id: string;
+  public tickets: Ticket[];
+  public createdAt: Date;
+  public updatedAt: Date;
+
+  constructor(props: Partial<User> & { name: string; email: string }) {
+    this.name = props.name;
+    this.email = props.email;
+    this.id = props.id ?? uuidv4();
+    this.tickets = props.tickets ?? [];
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
+  }
   static create(userData: ICreateUserData): User {
-    return new User(userData.name, userData.email)
+    return new User(userData)
   }
 
-  update(userData: ICreateUserData): void {
-    this.name = userData.name;
-    this.email = userData.email;
+  update(userData: IUpdateUserData): void {
+    if(userData.name) this.name = userData.name;
+    if(userData.email) this.email = userData.email;
     this.updatedAt = new Date();
   }
 }
