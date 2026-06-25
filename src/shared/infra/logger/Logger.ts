@@ -27,21 +27,17 @@ winston.addColors(colors);
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
   winston.format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}${info.details ? ' ' + JSON.stringify(info.details) : ''}`,
+    (info) =>
+      `${info.timestamp} ${info.level}: ${info.message}${info.details ? ' ' + JSON.stringify(info.details) : ''}`,
   ),
 );
 
-const transports = [
-  new winston.transports.Console(),
-];
+const transports = [new winston.transports.Console()];
 
 export const Logger = winston.createLogger({
   level: level(),
   levels,
-  format: winston.format.combine(
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-    winston.format.json()
-  ),
+  format: winston.format.combine(winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }), winston.format.json()),
   transports,
 });
 
@@ -49,28 +45,26 @@ if (process.env.NODE_ENV !== 'production') {
   Logger.format = winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
     winston.format.colorize({ all: true }),
-    winston.format.printf(
-      (info) => {
-        let msg = `${info.timestamp} ${info.level}: ${info.message}`;
-        
-        if (info.stack) {
-          msg += `\n${info.stack}`;
-        }
-        
-        if (info.details) {
-          if (Array.isArray(info.details) && info.details.length > 0 && info.details[0].property) {
-            msg += '\nValidation Details:';
-            info.details.forEach((err: any) => {
-              const constraints = err.constraints ? Object.values(err.constraints).join(', ') : 'Unknown error';
-              msg += `\n   - [${err.property}]: ${constraints}`;
-            });
-          } else {
-            msg += `\nDetails: ${JSON.stringify(info.details, null, 2)}`;
-          }
-        }
-        
-        return msg;
+    winston.format.printf((info) => {
+      let msg = `${info.timestamp} ${info.level}: ${info.message}`;
+
+      if (info.stack) {
+        msg += `\n${info.stack}`;
       }
-    ),
+
+      if (info.details) {
+        if (Array.isArray(info.details) && info.details.length > 0 && info.details[0].property) {
+          msg += '\nValidation Details:';
+          info.details.forEach((err: any) => {
+            const constraints = err.constraints ? Object.values(err.constraints).join(', ') : 'Unknown error';
+            msg += `\n   - [${err.property}]: ${constraints}`;
+          });
+        } else {
+          msg += `\nDetails: ${JSON.stringify(info.details, null, 2)}`;
+        }
+      }
+
+      return msg;
+    }),
   );
 }

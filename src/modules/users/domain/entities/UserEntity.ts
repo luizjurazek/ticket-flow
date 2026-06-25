@@ -1,5 +1,5 @@
-import { Ticket } from "../../../tickets/domain/TicketEntity";
-import { v4 as uuidv4 } from "uuid";  
+import { Ticket } from '../../../tickets/domain/TicketEntity';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ICreateUserData {
   name: string;
@@ -28,12 +28,12 @@ export class User {
     this.updatedAt = props.updatedAt ?? new Date();
   }
   static create(userData: ICreateUserData): User {
-    return new User(userData)
+    return new User(userData);
   }
 
   update(userData: IUpdateUserData): void {
-    if(userData.name) this.name = userData.name;
-    if(userData.email) this.email = userData.email;
+    if (userData.name) this.name = userData.name;
+    if (userData.email) this.email = userData.email;
     this.updatedAt = new Date();
   }
 }

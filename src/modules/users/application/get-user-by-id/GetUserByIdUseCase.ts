@@ -1,13 +1,13 @@
-import { AppError } from "../../../../shared/errors/AppError";
-import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { GetUserByIdOutputDTO } from "./dto";
+import { AppError } from '../../../../shared/errors/AppError';
+import { IUserRepository } from '../../domain/repositories/IUserRepository';
+import { GetUserByIdOutputDTO } from './dto';
 
 export class GetUserByIdUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(id: string): Promise<GetUserByIdOutputDTO> {
     const user = await this.userRepository.findById(id);
-    if (!user) throw new AppError("User not found", 404);
+    if (!user) throw new AppError('User not found', 404);
     return GetUserByIdOutputDTO.fromEntity(user);
   }
-} 
+}

@@ -4,8 +4,8 @@ import { IUserRepository } from '../../domain/repositories/IUserRepository';
 import { Ticket } from '../../../tickets/domain/TicketEntity';
 
 type PrismaUserWithTickets = Prisma.UserGetPayload<{
-  include: { tickets: true }
-}>
+  include: { tickets: true };
+}>;
 
 export class PrismaUserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -49,8 +49,8 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.prisma.user.findMany()
-    return users.map(user => new User(user));
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => new User(user));
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -71,16 +71,9 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   private mapToEntity(prismaUser: PrismaUserWithTickets): User {
-    const tickets = prismaUser.tickets.map(t => new Ticket(
-      t.id,
-      t.message,
-      t.channel,
-      t.priority,
-      t.status,
-      t.userId,
-      t.createdAt,
-      t.updatedAt
-    ));
+    const tickets = prismaUser.tickets.map(
+      (t) => new Ticket(t.id, t.message, t.channel, t.priority, t.status, t.userId, t.createdAt, t.updatedAt),
+    );
 
     return new User(prismaUser);
   }

@@ -1,5 +1,5 @@
-import { Expose, plainToInstance } from "class-transformer";
-import { User } from "../../domain/entities/UserEntity";
+import { Expose, plainToInstance } from 'class-transformer';
+import { User } from '../../domain/entities/UserEntity';
 
 export class GetUsersOutputDTO {
   @Expose() id!: string;
@@ -9,8 +9,8 @@ export class GetUsersOutputDTO {
   @Expose() updatedAt!: Date;
 
   static fromEntity(user: User): GetUsersOutputDTO {
-    return plainToInstance(GetUsersOutputDTO, user, { 
-      excludeExtraneousValues: true 
+    return plainToInstance(GetUsersOutputDTO, user, {
+      excludeExtraneousValues: true,
     });
   }
 }

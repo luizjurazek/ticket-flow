@@ -21,9 +21,8 @@ export class UpdateUserOutputDTO {
   @Expose() updatedAt!: Date;
 
   static fromEntity(user: User): UpdateUserOutputDTO {
-    return plainToInstance(UpdateUserOutputDTO, user, { 
-      excludeExtraneousValues: true 
+    return plainToInstance(UpdateUserOutputDTO, user, {
+      excludeExtraneousValues: true,
     });
   }
 }
-

@@ -5,20 +5,20 @@ import { GetUsersUseCase } from '../../application/get-users/GetUsersUseCase';
 import { GetUserByIdUseCase } from '../../application/get-user-by-id/GetUserByIdUseCase';
 import { DeleteUserUseCase } from '../../application/detete-user/DeleteUserUseCase';
 
-export class UserController { 
+export class UserController {
   constructor(
-    private readonly createUserUseCase: CreateUserUseCase, 
-    private readonly updateUserUseCase: UpdateUserUseCase, 
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly updateUserUseCase: UpdateUserUseCase,
     private readonly getUsersUseCase: GetUsersUseCase,
     private readonly getUserByIdUseCase: GetUserByIdUseCase,
-    private readonly deleteUserUseCase: DeleteUserUseCase
+    private readonly deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
   async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const { name, email } = req.body;
       const user = await this.createUserUseCase.execute({ name, email });
-      
+
       return res.status(201).json(user);
     } catch (error) {
       next(error);
@@ -28,7 +28,7 @@ export class UserController {
   async listById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const user = await this.getUserByIdUseCase.execute(req.params.id as string);
-      
+
       return res.status(200).json(user);
     } catch (error) {
       next(error);
@@ -38,7 +38,7 @@ export class UserController {
   async list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const users = await this.getUsersUseCase.execute();
-      
+
       return res.status(200).json(users);
     } catch (error) {
       next(error);
@@ -49,7 +49,7 @@ export class UserController {
     try {
       const { name, email } = req.body;
       const user = await this.updateUserUseCase.execute(req.params.id as string, { name, email });
-      
+
       return res.status(200).json(user);
     } catch (error) {
       next(error);
@@ -59,7 +59,7 @@ export class UserController {
   async delete(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       await this.deleteUserUseCase.execute(req.params.id as string);
-      
+
       return res.status(204).send();
     } catch (error) {
       next(error);
