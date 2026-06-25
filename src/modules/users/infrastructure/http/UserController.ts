@@ -2,12 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateUserUseCase } from '../../application/create-user/CreateUserUseCase';
 import { UpdateUserUseCase } from '../../application/update-user/UpdateUserUseCase';
 import { GetUsersUseCase } from '../../application/get-users/GetUsersUseCase';
+import { GetUserByIdUseCase } from '../../application/get-user-by-id/GetUserByIdUseCase';
 
 export class UserController { 
   constructor(
     private readonly createUserUseCase: CreateUserUseCase, 
     private readonly updateUserUseCase: UpdateUserUseCase, 
-    private readonly getUsersUseCase: GetUsersUseCase
+    private readonly getUsersUseCase: GetUsersUseCase,
+    private readonly getUserByIdUseCase: GetUserByIdUseCase
   ) {}
 
   async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
@@ -16,6 +18,16 @@ export class UserController {
       const user = await this.createUserUseCase.execute({ name, email });
       
       return res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const user = await this.getUserByIdUseCase.execute(req.params.id as string);
+      
+      return res.status(200).json(user);
     } catch (error) {
       next(error);
     }

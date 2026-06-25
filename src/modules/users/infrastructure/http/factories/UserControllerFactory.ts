@@ -4,13 +4,14 @@ import { UserController } from "../UserController";
 import { CreateUserUseCase } from "../../../application/create-user/CreateUserUseCase";
 import { UpdateUserUseCase } from "../../../application/update-user/UpdateUserUseCase";
 import { GetUsersUseCase } from "../../../application/get-users/GetUsersUseCase";
-
+import { GetUserByIdUseCase } from "../../../application/get-user-by-id/GetUserByIdUseCase";
 
 export function makeUserController(): UserController {
   const userRepository = new PrismaUserRepository(prisma);
   const createUserUseCase = new CreateUserUseCase(userRepository);
   const updateUserUseCase = new UpdateUserUseCase(userRepository);
   const getUsersUseCase = new GetUsersUseCase(userRepository);
+  const getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
   
-  return new UserController(createUserUseCase, updateUserUseCase, getUsersUseCase);
+  return new UserController(createUserUseCase, updateUserUseCase, getUsersUseCase, getUserByIdUseCase);
 }
