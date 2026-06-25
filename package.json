@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "start:docker": "npx prisma migrate deploy && npm run start"
+    "start:docker": "npx prisma migrate deploy && npm run start",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "@types/node": "^26.0.1",
     "@types/uuid": "^10.0.0",
     "@types/winston": "^2.4.4",
+    "prettier": "^3.8.4",
     "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3"
   }
