@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
+import { AppError } from '../../../errors/AppError';
 
 export function validateDto(dtoClass: any) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +14,7 @@ export function validateDto(dtoClass: any) {
         constraints: error.constraints,
       }));
 
-      return res.status(400).json({ errors: validationErrors });
+      return next(new AppError(`${validationErrors.length} validation error(s) found`, 400, validationErrors));
     }
 
     req.body = instance;

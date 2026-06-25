@@ -45,13 +45,32 @@ export const Logger = winston.createLogger({
   transports,
 });
 
-// For development, we might want a more readable format
 if (process.env.NODE_ENV !== 'production') {
   Logger.format = winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
     winston.format.colorize({ all: true }),
     winston.format.printf(
-      (info) => `${info.timestamp} ${info.level}: ${info.message}${info.stack ? '\n' + info.stack : ''}${info.details ? '\nDetails: ' + JSON.stringify(info.details, null, 2) : ''}`,
+      (info) => {
+        let msg = `${info.timestamp} ${info.level}: ${info.message}`;
+        
+        if (info.stack) {
+          msg += `\n${info.stack}`;
+        }
+        
+        if (info.details) {
+          if (Array.isArray(info.details) && info.details.length > 0 && info.details[0].property) {
+            msg += '\nValidation Details:';
+            info.details.forEach((err: any) => {
+              const constraints = err.constraints ? Object.values(err.constraints).join(', ') : 'Unknown error';
+              msg += `\n   - [${err.property}]: ${constraints}`;
+            });
+          } else {
+            msg += `\nDetails: ${JSON.stringify(info.details, null, 2)}`;
+          }
+        }
+        
+        return msg;
+      }
     ),
   );
 }
