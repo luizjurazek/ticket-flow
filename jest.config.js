@@ -1,0 +1,18 @@
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  transform: {
+    '^.+\\.(ts|js)$': [
+      'ts-jest',
+      {
+        useESM: false,
+      },
+    ],
+  },
+  transformIgnorePatterns: ['/node_modules/(?!(uuid)/)'],
+  testMatch: ['**/*.spec.ts'],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+};
