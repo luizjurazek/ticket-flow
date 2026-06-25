@@ -34,13 +34,7 @@ export class PrismaUserRepository implements IUserRepository {
       },
     });
 
-    return new User({
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      createdAt: updatedUser.createdAt,
-      updatedAt: updatedUser.updatedAt
-    });
+    return new User(updatedUser);
   }
 
   async delete(id: string): Promise<void> {
@@ -58,6 +52,11 @@ export class PrismaUserRepository implements IUserRepository {
     if (!user) return null;
 
     return this.mapToEntity(user);
+  }
+
+  async findAll(): Promise<User[]> {
+    const users = await this.prisma.user.findMany()
+    return users.map(user => new User(user));
   }
 
   async findByEmail(email: string): Promise<User | null> {
