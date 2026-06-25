@@ -1,0 +1,46 @@
+services:
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ticket_flow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ticket_flow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/ticket_flow
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+  api-dev:
+    profiles: ["dev"]
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/ticket_flow
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+volumes:
+  postgres_data:
