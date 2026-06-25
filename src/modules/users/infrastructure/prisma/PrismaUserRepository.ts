@@ -37,12 +37,6 @@ export class PrismaUserRepository implements IUserRepository {
     return new User(updatedUser);
   }
 
-  async delete(id: string): Promise<void> {
-    await this.prisma.user.delete({
-      where: { id },
-    });
-  }
-
   async findById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -68,6 +62,12 @@ export class PrismaUserRepository implements IUserRepository {
     if (!user) return null;
 
     return this.mapToEntity(user);
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.user.delete({
+      where: { id },
+    });
   }
 
   private mapToEntity(prismaUser: PrismaUserWithTickets): User {

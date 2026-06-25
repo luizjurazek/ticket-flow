@@ -11,7 +11,7 @@ userRoutes.post('/', validateDto(CreateUserDTO), (req, res, next: NextFunction) 
 userRoutes.get("/:id", (req, res, next: NextFunction) => userController.listById(req, res, next));
 userRoutes.get('/', (req, res, next: NextFunction) => userController.list(req, res, next));
 userRoutes.put("/:id", validateDto(UpdateUserDTO), (req, res, next: NextFunction) => userController.update(req, res, next));
-// userRoutes.delete("/:id", (req, res, next: NextFunction) => userController.delete(req, res, next));
+userRoutes.delete("/:id", (req, res, next: NextFunction) => userController.delete(req, res, next));
 
 export { userRoutes };
 

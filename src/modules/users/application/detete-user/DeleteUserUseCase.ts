@@ -1,13 +1,12 @@
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { GetUserByIdOutputDTO } from "./dto";
 
-export class GetUserByIdUseCase {
+export class DeleteUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: string): Promise<GetUserByIdOutputDTO> {
+  async execute(id: string): Promise<void> {
     const user = await this.userRepository.findById(id);
     if (!user) throw new AppError("User not found", 404);
-    return GetUserByIdOutputDTO.fromEntity(user);
+    await this.userRepository.delete(id);
   }
-} 
+}
