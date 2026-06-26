@@ -5,7 +5,7 @@ import { GetUsersUseCase } from '@/modules/users/application/get-users/get-user.
 import { GetUserByIdUseCase } from '@/modules/users/application/get-user-by-id/get-user-by-id.usecase';
 import { DeleteUserUseCase } from '@/modules/users/application/detete-user/delete-user.usecase';
 
-export class UserController {
+export class UsersController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,

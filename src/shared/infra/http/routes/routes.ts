@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { userRoutes } from '@/modules/users/infrastructure/http/users/user.routes';
+import { usersRoutes } from '@/modules/users/infrastructure/http/users/users.routes';
 
 const globalRouter = Router();
 
-globalRouter.use('/users', userRoutes);
+globalRouter.use('/users', usersRoutes);
 
 export { globalRouter };
