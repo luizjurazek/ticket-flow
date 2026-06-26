@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { HttpStatus } from '@/shared/http/http-status';
 import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user.usecase';
 import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
 import { GetUsersUseCase } from '@/modules/users/application/get-users/get-users.usecase';
@@ -19,7 +20,7 @@ export class UsersController {
       const { name, email } = req.body;
       const user = await this.createUserUseCase.execute({ name, email });
 
-      return res.status(201).json(user);
+      return res.status(HttpStatus.CREATED).json(user);
     } catch (error) {
       next(error);
     }
@@ -29,7 +30,7 @@ export class UsersController {
     try {
       const user = await this.getUserByIdUseCase.execute(req.params.id as string);
 
-      return res.status(200).json(user);
+      return res.status(HttpStatus.OK).json(user);
     } catch (error) {
       next(error);
     }
@@ -39,7 +40,7 @@ export class UsersController {
     try {
       const users = await this.getUsersUseCase.execute();
 
-      return res.status(200).json(users);
+      return res.status(HttpStatus.OK).json(users);
     } catch (error) {
       next(error);
     }
@@ -50,7 +51,7 @@ export class UsersController {
       const { name, email } = req.body;
       const user = await this.updateUserUseCase.execute(req.params.id as string, { name, email });
 
-      return res.status(200).json(user);
+      return res.status(HttpStatus.OK).json(user);
     } catch (error) {
       next(error);
     }
@@ -60,7 +61,7 @@ export class UsersController {
     try {
       await this.deleteUserUseCase.execute(req.params.id as string);
 
-      return res.status(204).send();
+      return res.status(HttpStatus.NO_CONTENT).send();
     } catch (error) {
       next(error);
     }

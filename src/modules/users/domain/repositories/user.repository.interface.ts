@@ -7,4 +7,5 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
   update(user: User): Promise<User>;
   delete(id: string): Promise<void>;
+  hasTickets(id: string): Promise<boolean>;
 }

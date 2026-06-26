@@ -1,4 +1,5 @@
 import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 import { Ticket } from '@/modules/tickets/domain/ticket.entity';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -35,7 +36,7 @@ export class User {
 
   update(userData: IUpdateUserData): void {
     if (!userData.name && !userData.email) {
-      throw new AppError('At least one field is required to update', 400);
+      throw new AppError('At least one field is required to update', HttpStatus.BAD_REQUEST);
     }
 
     if (userData.name) this.name = userData.name;

@@ -1,4 +1,5 @@
 import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 import { UserOutputDTO } from '../dtos/user-output.dto';
 
@@ -7,7 +8,7 @@ export class GetUserByIdUseCase {
 
   async execute(id: string): Promise<UserOutputDTO> {
     const user = await this.userRepository.findById(id);
-    if (!user) throw new AppError('User not found', 404);
+    if (!user) throw new AppError('User not found', HttpStatus.NOT_FOUND);
     return UserOutputDTO.fromEntity(user);
   }
 }

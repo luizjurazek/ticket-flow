@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 import { ValidationFieldError, ValidationSource } from '@/shared/errors/validation-error';
 
 type ValidationSchema = Partial<Record<ValidationSource, new () => object>>;
@@ -32,7 +33,7 @@ export function validateDto(dtoClass: new () => object, source: ValidationSource
 
     if (validationErrors.length > 0) {
       return next(
-        new AppError(`${validationErrors.length} validation error(s) found`, 400, validationErrors),
+        new AppError(`${validationErrors.length} validation error(s) found`, HttpStatus.BAD_REQUEST, validationErrors),
       );
     }
 
@@ -50,7 +51,7 @@ export function validateRequest(schema: ValidationSchema) {
 
     if (validationErrors.length > 0) {
       return next(
-        new AppError(`${validationErrors.length} validation error(s) found`, 400, validationErrors),
+        new AppError(`${validationErrors.length} validation error(s) found`, HttpStatus.BAD_REQUEST, validationErrors),
       );
     }
 

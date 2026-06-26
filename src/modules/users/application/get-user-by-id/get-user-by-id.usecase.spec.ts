@@ -1,5 +1,6 @@
 import { GetUserByIdUseCase } from './get-user-by-id.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
+import { HttpStatus } from '@/shared/http/http-status';
 import { faker } from '@faker-js/faker';
 import { User } from '@/modules/users/domain/entities/user.entity';
 
@@ -30,7 +31,7 @@ describe('GetUserByIdUseCase', () => {
   it('should throw error when user is not found', async () => {
     await expect(getUserByIdUseCase.execute('non-existent-id')).rejects.toMatchObject({
       message: 'User not found',
-      statusCode: 404,
+      statusCode: HttpStatus.NOT_FOUND,
     });
   });
 });

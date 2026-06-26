@@ -1,6 +1,7 @@
 import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 import { faker } from '@faker-js/faker';
 
 describe('CreateUserUseCase', () => {
@@ -34,7 +35,7 @@ describe('CreateUserUseCase', () => {
     await createUserUseCase.execute(userData);
     await expect(createUserUseCase.execute(userData)).rejects.toMatchObject({
       message: 'User already exists',
-      statusCode: 400,
+      statusCode: HttpStatus.BAD_REQUEST,
     });
   });
 });

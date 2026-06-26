@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { User } from '@/modules/users/domain/entities/user.entity';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
+import { HttpStatus } from '@/shared/http/http-status';
 import { UpdateUserUseCase } from './update-user.usecase';
 
 describe('UpdateUserUseCase', () => {
@@ -66,7 +67,7 @@ describe('UpdateUserUseCase', () => {
       updateUserUseCase.execute('non-existent-id', { name: faker.person.fullName() }),
     ).rejects.toMatchObject({
       message: 'User not found',
-      statusCode: 404,
+      statusCode: HttpStatus.NOT_FOUND,
     });
   });
 
@@ -76,7 +77,7 @@ describe('UpdateUserUseCase', () => {
 
     await expect(updateUserUseCase.execute(firstUser.id, { email: secondUser.email })).rejects.toMatchObject({
       message: 'Email already in use',
-      statusCode: 400,
+      statusCode: HttpStatus.BAD_REQUEST,
     });
   });
 
@@ -85,7 +86,7 @@ describe('UpdateUserUseCase', () => {
 
     await expect(updateUserUseCase.execute(user.id, {})).rejects.toMatchObject({
       message: 'At least one field is required to update',
-      statusCode: 400,
+      statusCode: HttpStatus.BAD_REQUEST,
     });
   });
 });

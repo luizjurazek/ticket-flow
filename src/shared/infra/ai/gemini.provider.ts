@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { IGeminiProvider } from './gemini.provider.interface';
 import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 
 export class GeminiProvider implements IGeminiProvider {
   private genAI: GoogleGenerativeAI;
@@ -12,7 +13,7 @@ export class GeminiProvider implements IGeminiProvider {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      throw new AppError('GEMINI_API_KEY is not defined in environment variables', 500);
+      throw new AppError('GEMINI_API_KEY is not defined in environment variables', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     this.genAI = new GoogleGenerativeAI(apiKey);
@@ -26,7 +27,7 @@ export class GeminiProvider implements IGeminiProvider {
       return response.text();
     } catch (error) {
       console.error('Gemini API Error:', error);
-      throw new AppError('Failed to generate content from Gemini', 500);
+      throw new AppError('Failed to generate content from Gemini', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

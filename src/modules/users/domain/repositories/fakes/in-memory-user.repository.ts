@@ -32,4 +32,10 @@ export class InMemoryUserRepository implements IUserRepository {
   async findAll(): Promise<User[]> {
     return this.users;
   }
+
+  async hasTickets(id: string): Promise<boolean> {
+    const user = await this.findById(id);
+    if (!user) return false;
+    return user.tickets?.length > 0;
+  }
 }
