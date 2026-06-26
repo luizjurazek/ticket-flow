@@ -2,22 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { AppError } from '@/shared/errors/app-error';
-
-type ValidationSource = 'body' | 'params' | 'query';
+import { ValidationFieldError, ValidationSource } from '@/shared/errors/validation-error';
 
 type ValidationSchema = Partial<Record<ValidationSource, new () => object>>;
-
-interface ParsedValidationError {
-  source: ValidationSource;
-  property: string;
-  constraints?: Record<string, string>;
-}
 
 async function validateSource(
   req: Request,
   source: ValidationSource,
   dtoClass: new () => object,
-): Promise<ParsedValidationError[]> {
+): Promise<ValidationFieldError[]> {
   const instance = plainToInstance(dtoClass, req[source]);
   const errors = await validate(instance);
 

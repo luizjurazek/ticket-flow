@@ -1,4 +1,8 @@
 import winston from 'winston';
+import {
+  formatValidationErrorsForLog,
+  isValidationFieldError,
+} from '@/shared/errors/validation-error';
 
 const levels = {
   error: 0,
@@ -6,12 +10,6 @@ const levels = {
   info: 2,
   http: 3,
   debug: 4,
-};
-
-const level = () => {
-  const env = process.env.NODE_ENV || 'development';
-  const isDevelopment = env === 'development';
-  return isDevelopment ? 'debug' : 'warn';
 };
 
 const colors = {
@@ -22,49 +20,46 @@ const colors = {
   debug: 'white',
 };
 
+function resolveLogLevel(): string {
+  const env = process.env.NODE_ENV || 'development';
+  return env === 'development' ? 'debug' : 'warn';
+}
+
+function formatDevLogMessage(info: winston.Logform.TransformableInfo): string {
+  let message = `${info.timestamp} ${info.level}: ${info.message}`;
+
+  if (info.statusCode) {
+    message += ` [${info.statusCode}]`;
+  }
+
+  if (info.stack) {
+    message += `\n${info.stack}`;
+  }
+
+  if (info.details) {
+    if (isValidationFieldError(info.details)) {
+      message += `\nValidation errors:\n${formatValidationErrorsForLog(info.details)}`;
+    } else {
+      message += `\nDetails: ${JSON.stringify(info.details, null, 2)}`;
+    }
+  }
+
+  return message;
+}
+
 winston.addColors(colors);
 
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.printf(
-    (info) =>
-      `${info.timestamp} ${info.level}: ${info.message}${info.details ? ' ' + JSON.stringify(info.details) : ''}`,
-  ),
-);
-
-const transports = [new winston.transports.Console()];
+const isProduction = process.env.NODE_ENV === 'production';
 
 export const Logger = winston.createLogger({
-  level: level(),
+  level: resolveLogLevel(),
   levels,
-  format: winston.format.combine(winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }), winston.format.json()),
-  transports,
+  format: isProduction
+    ? winston.format.combine(winston.format.timestamp(), winston.format.json())
+    : winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.colorize({ all: true }),
+        winston.format.printf(formatDevLogMessage),
+      ),
+  transports: [new winston.transports.Console()],
 });
-
-if (process.env.NODE_ENV !== 'production') {
-  Logger.format = winston.format.combine(
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-    winston.format.colorize({ all: true }),
-    winston.format.printf((info) => {
-      let msg = `${info.timestamp} ${info.level}: ${info.message}`;
-
-      if (info.stack) {
-        msg += `\n${info.stack}`;
-      }
-
-      if (info.details) {
-        if (Array.isArray(info.details) && info.details.length > 0 && info.details[0].property) {
-          msg += '\nValidation Details:';
-          info.details.forEach((err: any) => {
-            const constraints = err.constraints ? Object.values(err.constraints).join(', ') : 'Unknown error';
-            msg += `\n   - [${err.property}]: ${constraints}`;
-          });
-        } else {
-          msg += `\nDetails: ${JSON.stringify(info.details, null, 2)}`;
-        }
-      }
-
-      return msg;
-    }),
-  );
-}
