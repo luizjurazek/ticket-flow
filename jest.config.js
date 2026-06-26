@@ -3,7 +3,6 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@test/(.*)$': '<rootDir>/test/$1',
   },
   transform: {
     '^.+\\.(ts|js)$': [
@@ -15,5 +14,5 @@ module.exports = {
   },
   transformIgnorePatterns: ['/node_modules/(?!(uuid|@faker-js/faker)/)'],
   testMatch: ['**/*.spec.ts'],
-  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 };
