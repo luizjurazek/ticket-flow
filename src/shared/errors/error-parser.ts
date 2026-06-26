@@ -1,6 +1,7 @@
 import { AppError } from './app-error';
-import { Logger } from '@/shared/infra/logger/logger';
+import { StructuredLogger } from '@/shared/infra/logger/logger';
 import { HttpStatus } from '@/shared/http/http-status';
+import { LogContext } from '../infra/logger/log-context.interface';
 
 interface ParsedError {
   message: string;
@@ -34,19 +35,15 @@ export class ErrorParser {
     };
   }
 
-  /**
-   * Main utility to be used in catch blocks.
-   * Logs the error and returns a formatted response object.
-   */
-  public static handle(error: any, context?: string): ParsedError {
+  public static handle(error: unknown, context: LogContext): ParsedError {
     const parsed = this.parse(error);
-
-    Logger.error(`${context ? `[${context}] ` : ''}${parsed.message}`, {
+    StructuredLogger.error(parsed.message, {
+      ...context,
       statusCode: parsed.statusCode,
+      errorType: error instanceof AppError ? 'AppError' : error instanceof Error ? error.name : 'Unknown',
       details: parsed.details,
       stack: parsed.stack,
     });
-
     return parsed;
   }
 }

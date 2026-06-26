@@ -3,7 +3,11 @@ import { ErrorParser } from '@/shared/errors/error-parser';
 import { isValidationFieldError, toApiFieldErrors } from '@/shared/errors/validation-error';
 
 export function errorHandler(error: any, request: Request, response: Response, next: NextFunction): void {
-  const parsed = ErrorParser.handle(error, `${request.method} ${request.url}`);
+  const parsed = ErrorParser.handle(error, {
+    requestId: request.requestId,
+    method: request.method,
+    path: request.originalUrl,
+  });
 
   const responseData: Record<string, unknown> = {
     status: 'error',

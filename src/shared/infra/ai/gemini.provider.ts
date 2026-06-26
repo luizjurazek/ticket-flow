@@ -2,6 +2,7 @@ import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { IGeminiProvider } from './gemini.provider.interface';
 import { AppError } from '@/shared/errors/app-error';
 import { HttpStatus } from '@/shared/http/http-status';
+import { StructuredLogger } from '../logger/logger';
 
 export class GeminiProvider implements IGeminiProvider {
   private genAI: GoogleGenerativeAI;
@@ -26,7 +27,7 @@ export class GeminiProvider implements IGeminiProvider {
       const response = await result.response;
       return response.text();
     } catch (error) {
-      console.error('Gemini API Error:', error);
+      StructuredLogger.error('Gemini API failed to generate text', { module: 'ai', details: error });
       throw new AppError('Failed to generate content from Gemini', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

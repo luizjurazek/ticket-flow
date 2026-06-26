@@ -1,8 +1,6 @@
 import winston from 'winston';
-import {
-  formatValidationErrorsForLog,
-  isValidationFieldError,
-} from '@/shared/errors/validation-error';
+import { formatValidationErrorsForLog, isValidationFieldError } from '@/shared/errors/validation-error';
+import { LogContext } from '@/shared/infra/logger/log-context.interface';
 
 const levels = {
   error: 0,
@@ -20,9 +18,15 @@ const colors = {
   debug: 'white',
 };
 
-function resolveLogLevel(): string {
-  const env = process.env.NODE_ENV || 'development';
-  return env === 'development' ? 'debug' : 'warn';
+type LogLevel = keyof typeof levels;
+
+function resolveLogLevel(): LogLevel {
+  const configuredLevel = process.env.LOG_LEVEL?.toLowerCase();
+  if (configuredLevel && configuredLevel in levels) {
+    return configuredLevel as LogLevel;
+  }
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  return nodeEnv === 'development' ? 'debug' : 'http';
 }
 
 function formatDevLogMessage(info: winston.Logform.TransformableInfo): string {
@@ -63,3 +67,15 @@ export const Logger = winston.createLogger({
       ),
   transports: [new winston.transports.Console()],
 });
+
+function log(level: keyof typeof levels, message: string, context?: LogContext): void {
+  Logger[level](message, context ?? {});
+}
+
+export const StructuredLogger = {
+  error: (message: string, context?: LogContext) => log('error', message, context),
+  warn: (message: string, context?: LogContext) => log('warn', message, context),
+  info: (message: string, context?: LogContext) => log('info', message, context),
+  http: (message: string, context?: LogContext) => log('http', message, context),
+  debug: (message: string, context?: LogContext) => log('debug', message, context),
+};

@@ -15,29 +15,29 @@ export class UsersController {
     private readonly deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
-  async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async create(req: Request, res: Response): Promise<Response | void> {
     const { name, email } = req.body;
     const user = await this.createUserUseCase.execute({ name, email });
     return res.status(HttpStatus.CREATED).json(user);
   }
 
-  async findById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async findById(req: Request, res: Response): Promise<Response | void> {
     const user = await this.getUserByIdUseCase.execute(req.params.id as string);
     return res.status(HttpStatus.OK).json(user);
   }
 
-  async findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async findAll(req: Request, res: Response): Promise<Response | void> {
     const users = await this.getUsersUseCase.execute();
     return res.status(HttpStatus.OK).json(users);
   }
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async update(req: Request, res: Response): Promise<Response | void> {
     const { name, email } = req.body;
     const user = await this.updateUserUseCase.execute(req.params.id as string, { name, email });
     return res.status(HttpStatus.OK).json(user);
   }
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async delete(req: Request, res: Response): Promise<Response | void> {
     await this.deleteUserUseCase.execute(req.params.id as string);
     return res.status(HttpStatus.NO_CONTENT).send();
   }
