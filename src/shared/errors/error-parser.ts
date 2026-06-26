@@ -12,7 +12,7 @@ interface ParsedError {
 export class ErrorParser {
   public static parse(error: any): ParsedError {
     let message = 'Internal server error';
-    let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    let statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR;
     let details: any = undefined;
     let stack = error instanceof Error ? error.stack : undefined;
 
