@@ -23,7 +23,10 @@ describe('CreateUserUseCase', () => {
   }
 
   it('should create a new user successfully', async () => {
-    const user = await createUser(userRepository);
+    const user = await createUserUseCase.execute({
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+    });
 
     expect(user).not.toBeNull();
     expect(user.id).toBeDefined();
