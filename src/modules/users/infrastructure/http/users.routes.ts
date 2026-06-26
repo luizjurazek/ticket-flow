@@ -1,9 +1,9 @@
 import { Router, NextFunction } from 'express';
-import { makeUsersController } from '@/modules/users/infrastructure/http/users/factories/users.controller.factory';
+import { makeUsersController } from '@/modules/users/infrastructure/http/factories/users.controller.factory';
 import { validateDto, validateRequest } from '@/shared/infra/http/middlewares/validation.middleware';
 import { IdParamDTO } from '@/shared/infra/http/dtos/id-param.dto';
-import { CreateUserInputDTO } from '@/modules/users/infrastructure/http/users/dtos/create-user-input.dto';
-import { UpdateUserInputDTO } from '@/modules/users/infrastructure/http/users/dtos/update-user-input.dto';
+import { CreateUserInputDTO } from '@/modules/users/infrastructure/http/dtos/create-user-input.dto';
+import { UpdateUserInputDTO } from '@/modules/users/infrastructure/http/dtos/update-user-input.dto';
 
 const usersRoutes = Router();
 const usersController = makeUsersController();
