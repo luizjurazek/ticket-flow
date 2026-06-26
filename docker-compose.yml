@@ -26,6 +26,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       NODE_ENV: production
+      LOG_LEVEL: http
 
   api-dev:
     profiles: ['dev']
