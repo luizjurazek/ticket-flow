@@ -12,17 +12,13 @@ describe('GetUserByIdUseCase', () => {
     getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
   });
 
-  async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return await userRepository.create(
+  it('should get a user by id successfully', async () => {
+    const user = await userRepository.create(
       User.create({
         name: faker.person.fullName(),
         email: faker.internet.email(),
       }),
     );
-  }
-
-  it('should get a user by id successfully', async () => {
-    const user = await createUser(userRepository);
 
     const userById = await getUserByIdUseCase.execute(user.id);
 
