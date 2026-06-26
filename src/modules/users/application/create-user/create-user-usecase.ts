@@ -1,6 +1,6 @@
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 import { ICreateUserData, User } from '@/modules/users/domain/entities/user.entity';
-import { AppError } from '@/shared/errors/AppError';
+import { AppError } from '@/shared/errors/app-error';
 
 export class CreateUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}

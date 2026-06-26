@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from './create-user-usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { AppError } from '@/shared/errors/AppError';
+import { AppError } from '@/shared/errors/app-error';
 
 describe('CreateUserUseCase', () => {
   let userRepository: InMemoryUserRepository;

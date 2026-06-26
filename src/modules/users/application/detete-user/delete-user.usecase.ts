@@ -1,4 +1,4 @@
-import { AppError } from '@/shared/errors/AppError';
+import { AppError } from '@/shared/errors/app-error';
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 
 export class DeleteUserUseCase {

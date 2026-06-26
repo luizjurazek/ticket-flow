@@ -1,5 +1,5 @@
-import { AppError } from './AppError';
-import { Logger } from '@/shared/infra/logger/Logger';
+import { AppError } from './app-error';
+import { Logger } from '@/shared/infra/logger/logger';
 
 interface ParsedError {
   message: string;

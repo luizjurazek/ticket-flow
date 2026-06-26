@@ -1,4 +1,4 @@
-import { AppError } from '@/shared/errors/AppError';
+import { AppError } from '@/shared/errors/app-error';
 import { Ticket } from '@/modules/tickets/domain/ticket.entity';
 import { v4 as uuidv4 } from 'uuid';
 

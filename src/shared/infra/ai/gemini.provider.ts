@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
-import { IGeminiProvider } from './IGeminiProvider';
-import { AppError } from '@/shared/errors/AppError';
+import { IGeminiProvider } from './gemini.provider.interface';
+import { AppError } from '@/shared/errors/app-error';
 
 export class GeminiProvider implements IGeminiProvider {
   private genAI: GoogleGenerativeAI;

@@ -1,4 +1,4 @@
-import { IGeminiProvider } from '@/shared/infra/ai/IGeminiProvider';
+import { IGeminiProvider } from '@/shared/infra/ai/gemini.provider.interface';
 
 export class FakeGeminiProvider implements IGeminiProvider {
   public responses: string[] = ['Mocked Gemini Response'];
