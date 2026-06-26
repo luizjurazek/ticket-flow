@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { CreateUserUseCase } from '../../application/create-user/create-user-usecase';
-import { UpdateUserUseCase } from '../../application/update-user/update-user.usecase';
-import { GetUsersUseCase } from '../../application/get-users/get-user.usecase';
-import { GetUserByIdUseCase } from '../../application/get-user-by-id/get-user-by-id.usecase';
-import { DeleteUserUseCase } from '../../application/detete-user/delete-user.usecase';
+import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user-usecase';
+import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
+import { GetUsersUseCase } from '@/modules/users/application/get-users/get-user.usecase';
+import { GetUserByIdUseCase } from '@/modules/users/application/get-user-by-id/get-user-by-id.usecase';
+import { DeleteUserUseCase } from '@/modules/users/application/detete-user/delete-user.usecase';
 
 export class UserController {
   constructor(

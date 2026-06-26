@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ErrorParser } from '../../../errors/ErrorParser';
+import { ErrorParser } from '@/shared/errors/ErrorParser';
 
 export function errorHandler(error: any, request: Request, response: Response, next: NextFunction): void {
   const parsed = ErrorParser.handle(error, `${request.method} ${request.url}`);

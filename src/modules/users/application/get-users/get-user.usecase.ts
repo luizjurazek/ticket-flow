@@ -1,5 +1,4 @@
-import { User } from '../../domain/entities/user.entity';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 import { GetUsersOutputDTO } from './dto';
 
 export class GetUsersUseCase {

@@ -1,5 +1,5 @@
-import { AppError } from '../../../../shared/errors/AppError';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { AppError } from '@/shared/errors/AppError';
+import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 
 export class DeleteUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
