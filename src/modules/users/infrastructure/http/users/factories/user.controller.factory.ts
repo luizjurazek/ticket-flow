@@ -1,6 +1,6 @@
 import { prisma } from '@/shared/database/prisma';
 import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/prisma-user.repository';
-import { UserController } from '@/modules/users/infrastructure/http/user.controller';
+import { UserController } from '@/modules/users/infrastructure/http/users/user.controller';
 import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user-usecase';
 import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
 import { GetUsersUseCase } from '@/modules/users/application/get-users/get-user.usecase';

@@ -1,5 +1,5 @@
 import { Router, NextFunction } from 'express';
-import { makeUserController } from '@/modules/users/infrastructure/http/factories/user.controller.factory';
+import { makeUserController } from '@/modules/users/infrastructure/http/users/factories/user.controller.factory';
 import { validateDto } from '@/shared/infra/http/middlewares/validation.middleware';
 import { CreateUserDTO } from '@/modules/users/application/create-user/dto';
 import { UpdateUserDTO } from '@/modules/users/application/update-user/dto';
