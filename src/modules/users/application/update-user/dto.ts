@@ -12,17 +12,3 @@ export class UpdateUserDTO {
   @IsOptional()
   email?: string;
 }
-
-export class UpdateUserOutputDTO {
-  @Expose() id!: string;
-  @Expose() name!: string;
-  @Expose() email!: string;
-  @Expose() createdAt!: Date;
-  @Expose() updatedAt!: Date;
-
-  static fromEntity(user: User): UpdateUserOutputDTO {
-    return plainToInstance(UpdateUserOutputDTO, user, {
-      excludeExtraneousValues: true,
-    });
-  }
-}

@@ -1,17 +1,18 @@
 import { IUpdateUserData } from '@/modules/users/domain/entities/user.entity';
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
-import { UpdateUserOutputDTO } from './dto';
+import { AppError } from '@/shared/errors/app-error';
+import { UserOutputDTO } from '../dtos/user-output.dto';
 
 export class UpdateUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: string, data: IUpdateUserData): Promise<UpdateUserOutputDTO> {
+  async execute(id: string, data: IUpdateUserData): Promise<UserOutputDTO> {
     const user = await this.userRepository.findById(id);
-    if (!user) throw new Error('User not found');
+    if (!user) throw new AppError('User not found', 404);
 
     user.update(data);
     await this.userRepository.update(user);
 
-    return UpdateUserOutputDTO.fromEntity(user);
+    return UserOutputDTO.fromEntity(user);
   }
 }

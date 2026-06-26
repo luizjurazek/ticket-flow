@@ -1,11 +1,11 @@
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
-import { GetUsersOutputDTO } from './dto';
+import { UserOutputDTO } from '../dtos/user-output.dto';
 
 export class GetUsersUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(): Promise<GetUsersOutputDTO[]> {
+  async execute(): Promise<UserOutputDTO[]> {
     const users = await this.userRepository.findAll();
-    return users.map((user) => GetUsersOutputDTO.fromEntity(user));
+    return users.map((user) => UserOutputDTO.fromEntity(user));
   }
 }
