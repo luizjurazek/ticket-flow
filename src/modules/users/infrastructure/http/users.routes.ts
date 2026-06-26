@@ -11,9 +11,9 @@ const usersController = makeUsersController();
 usersRoutes.post('/', validateDto(CreateUserInputDTO), (req, res, next: NextFunction) =>
   usersController.create(req, res, next),
 );
-usersRoutes.get('/', (req, res, next: NextFunction) => usersController.list(req, res, next));
+usersRoutes.get('/', (req, res, next: NextFunction) => usersController.findAll(req, res, next));
 usersRoutes.get('/:id', validateDto(IdParamDTO, 'params'), (req, res, next: NextFunction) =>
-  usersController.listById(req, res, next),
+  usersController.findById(req, res, next),
 );
 usersRoutes.put(
   '/:id',

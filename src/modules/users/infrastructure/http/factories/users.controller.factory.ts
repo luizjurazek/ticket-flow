@@ -9,17 +9,12 @@ import { DeleteUserUseCase } from '@/modules/users/application/delete-user/delet
 
 export function makeUsersController(): UsersController {
   const userRepository = new PrismaUserRepository(prisma);
-  const createUserUseCase = new CreateUserUseCase(userRepository);
-  const updateUserUseCase = new UpdateUserUseCase(userRepository);
-  const getUsersUseCase = new GetUsersUseCase(userRepository);
-  const getUserByIdUseCase = new GetUserByIdUseCase(userRepository);
-  const deleteUserUseCase = new DeleteUserUseCase(userRepository);
 
   return new UsersController(
-    createUserUseCase,
-    updateUserUseCase,
-    getUsersUseCase,
-    getUserByIdUseCase,
-    deleteUserUseCase,
+    new CreateUserUseCase(userRepository),
+    new UpdateUserUseCase(userRepository),
+    new GetUsersUseCase(userRepository),
+    new GetUserByIdUseCase(userRepository),
+    new DeleteUserUseCase(userRepository),
   );
 }

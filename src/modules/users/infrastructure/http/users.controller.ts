@@ -26,7 +26,7 @@ export class UsersController {
     }
   }
 
-  async listById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async findById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const user = await this.getUserByIdUseCase.execute(req.params.id as string);
 
@@ -36,7 +36,7 @@ export class UsersController {
     }
   }
 
-  async list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  async findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const users = await this.getUsersUseCase.execute();
 
