@@ -3,7 +3,7 @@ import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/pris
 import { UsersController } from '@/modules/users/infrastructure/http/users/users.controller';
 import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user-usecase';
 import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
-import { GetUsersUseCase } from '@/modules/users/application/get-users/get-user.usecase';
+import { GetUsersUseCase } from '@/modules/users/application/get-users/get-users.usecase';
 import { GetUserByIdUseCase } from '@/modules/users/application/get-user-by-id/get-user-by-id.usecase';
 import { DeleteUserUseCase } from '@/modules/users/application/detete-user/delete-user.usecase';
 

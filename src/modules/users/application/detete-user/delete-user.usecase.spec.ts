@@ -15,12 +15,7 @@ describe('DeleteUserUseCase', () => {
   });
 
   async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return await userRepository.create(
-      User.create({
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-      }),
-    );
+    return userRepository.create(User.create({ name: faker.person.fullName(), email: faker.internet.email() }));
   }
 
   it('should delete a user successfully', async () => {
