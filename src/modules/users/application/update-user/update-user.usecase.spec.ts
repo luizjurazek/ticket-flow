@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { User } from '@/modules/users/domain/entities/user.entity';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { AppError } from '@/shared/errors/app-error';
 import { UpdateUserUseCase } from './update-user.usecase';
 
 describe('UpdateUserUseCase', () => {
@@ -84,12 +83,9 @@ describe('UpdateUserUseCase', () => {
   it('should throw error when name and email are empty', async () => {
     const user = await createUser(userRepository);
 
-    await expect(updateUserUseCase.execute(user.id, {})).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('should throw error when email is invalid', async () => {
-    const user = await createUser(userRepository);
-
-    await expect(updateUserUseCase.execute(user.id, { email: 'invalid-email' })).rejects.toBeInstanceOf(AppError);
+    await expect(updateUserUseCase.execute(user.id, {})).rejects.toMatchObject({
+      message: 'At least one field is required to update',
+      statusCode: 400,
+    });
   });
 });

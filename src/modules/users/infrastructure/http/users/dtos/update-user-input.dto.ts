@@ -1,6 +1,6 @@
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
-export class UpdateUserDTO {
+export class UpdateUserInputDTO {
   @IsString()
   @IsOptional()
   @MinLength(3, { message: 'Name must be at least 3 characters long' })

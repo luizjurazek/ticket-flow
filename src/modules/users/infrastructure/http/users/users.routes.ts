@@ -3,7 +3,7 @@ import { makeUsersController } from '@/modules/users/infrastructure/http/users/f
 import { validateDto, validateRequest } from '@/shared/infra/http/middlewares/validation.middleware';
 import { IdParamDTO } from '@/shared/infra/http/dtos/id-param.dto';
 import { CreateUserInputDTO } from '@/modules/users/infrastructure/http/users/dtos/create-user-input.dto';
-import { UpdateUserDTO } from '@/modules/users/infrastructure/http/users/dtos/update-user-input.dto';
+import { UpdateUserInputDTO } from '@/modules/users/infrastructure/http/users/dtos/update-user-input.dto';
 
 const usersRoutes = Router();
 const usersController = makeUsersController();
@@ -15,8 +15,10 @@ usersRoutes.get('/', (req, res, next: NextFunction) => usersController.list(req,
 usersRoutes.get('/:id', validateDto(IdParamDTO, 'params'), (req, res, next: NextFunction) =>
   usersController.listById(req, res, next),
 );
-usersRoutes.put('/:id', validateRequest({ params: IdParamDTO, body: UpdateUserDTO }), (req, res, next: NextFunction) =>
-  usersController.update(req, res, next),
+usersRoutes.put(
+  '/:id',
+  validateRequest({ params: IdParamDTO, body: UpdateUserInputDTO }),
+  (req, res, next: NextFunction) => usersController.update(req, res, next),
 );
 usersRoutes.delete('/:id', validateDto(IdParamDTO, 'params'), (req, res, next: NextFunction) =>
   usersController.delete(req, res, next),

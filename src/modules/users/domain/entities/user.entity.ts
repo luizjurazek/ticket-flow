@@ -28,22 +28,14 @@ export class User {
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
   }
+
   static create(userData: ICreateUserData): User {
-    if (!userData.name || !userData.email) {
-      throw new AppError('Name and email are required', 400);
-    }
-    if (!userData.email.includes('@')) {
-      throw new AppError('Invalid email', 400);
-    }
     return new User(userData);
   }
 
   update(userData: IUpdateUserData): void {
     if (!userData.name && !userData.email) {
-      throw new AppError('Name or email is required', 400);
-    }
-    if (userData.email && !userData.email.includes('@')) {
-      throw new AppError('Invalid email', 400);
+      throw new AppError('At least one field is required to update', 400);
     }
 
     if (userData.name) this.name = userData.name;

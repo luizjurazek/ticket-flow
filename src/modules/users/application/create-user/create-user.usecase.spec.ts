@@ -2,7 +2,6 @@ import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { AppError } from '@/shared/errors/app-error';
 import { faker } from '@faker-js/faker';
-import { User } from '../../domain/entities/user.entity';
 
 describe('CreateUserUseCase', () => {
   let userRepository: InMemoryUserRepository;
@@ -14,41 +13,28 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should create a new user successfully', async () => {
-    const user = await createUserUseCase.execute({
+    const userData = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
-    });
+    };
 
-    expect(user).not.toBeNull();
+    const user = await createUserUseCase.execute(userData);
+
     expect(user.id).toBeDefined();
-    expect(user.email).toBe(user.email);
-    expect(user.name).toBe(user.name);
+    expect(user.email).toBe(userData.email);
+    expect(user.name).toBe(userData.name);
   });
 
   it('should throw error when user already exists', async () => {
-    const user = await createUserUseCase.execute({
+    const userData = {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+    };
+
+    await createUserUseCase.execute(userData);
+    await expect(createUserUseCase.execute(userData)).rejects.toMatchObject({
+      message: 'User already exists',
+      statusCode: 400,
     });
-
-    await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('should throw error when email is empty', async () => {
-    await expect(createUserUseCase.execute({ name: faker.person.fullName(), email: '' })).rejects.toBeInstanceOf(
-      AppError,
-    );
-  });
-
-  it('should throw error when name is empty', async () => {
-    await expect(createUserUseCase.execute({ name: '', email: faker.internet.email() })).rejects.toBeInstanceOf(
-      AppError,
-    );
-  });
-
-  it('should throw error when email is invalid', async () => {
-    await expect(
-      createUserUseCase.execute({ name: faker.person.fullName(), email: 'invalid-email' }),
-    ).rejects.toBeInstanceOf(AppError);
   });
 });
