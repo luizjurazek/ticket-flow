@@ -63,9 +63,22 @@ describe('UpdateUserUseCase', () => {
   });
 
   it('should throw error when user is not found', async () => {
-    await expect(updateUserUseCase.execute('non-existent-id', { name: faker.person.fullName() })).rejects.toThrow(
-      'User not found',
-    );
+    await expect(
+      updateUserUseCase.execute('non-existent-id', { name: faker.person.fullName() }),
+    ).rejects.toMatchObject({
+      message: 'User not found',
+      statusCode: 404,
+    });
+  });
+
+  it('should throw error when email is already in use', async () => {
+    const firstUser = await createUser(userRepository);
+    const secondUser = await createUser(userRepository);
+
+    await expect(updateUserUseCase.execute(firstUser.id, { email: secondUser.email })).rejects.toMatchObject({
+      message: 'Email already in use',
+      statusCode: 400,
+    });
   });
 
   it('should throw error when name and email are empty', async () => {
