@@ -1,7 +1,6 @@
 import { DeleteUserUseCase } from './delete-user.usecase';
-import { CreateUserUseCase } from '../create-user/create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 import { User } from '@/modules/users/domain/entities/user.entity';
 import { faker } from '@faker-js/faker';
 
@@ -27,7 +26,23 @@ describe('DeleteUserUseCase', () => {
   });
 
   it('should throw error when user is not found', async () => {
-    await expect(deleteUserUseCase.execute('non-existent-id')).rejects.toBeInstanceOf(AppError);
+    await expect(deleteUserUseCase.execute('non-existent-id')).rejects.toMatchObject({
+      message: 'User not found',
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  });
+
+  it('should throw error when user has associated tickets', async () => {
+    const user = await createUser(userRepository);
+    userRepository.markUserWithTickets(user.id);
+
+    await expect(deleteUserUseCase.execute(user.id)).rejects.toMatchObject({
+      message: 'User has associated tickets and cannot be deleted',
+      statusCode: HttpStatus.CONFLICT,
+    });
+
+    const existingUser = await userRepository.findById(user.id);
+    expect(existingUser).not.toBeNull();
   });
 
   it('should not delete other users when deleting one user', async () => {

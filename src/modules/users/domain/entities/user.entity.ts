@@ -1,6 +1,5 @@
 import { AppError } from '@/shared/errors/app-error';
 import { HttpStatus } from '@/shared/http/http-status';
-import { Ticket } from '@/modules/tickets/domain/ticket.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ICreateUserData {
@@ -17,7 +16,6 @@ export class User {
   public name: string;
   public email: string;
   public id: string;
-  public tickets: Ticket[];
   public createdAt: Date;
   public updatedAt: Date;
 
@@ -25,7 +23,6 @@ export class User {
     this.name = props.name;
     this.email = props.email;
     this.id = props.id ?? uuidv4();
-    this.tickets = props.tickets ?? [];
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
   }

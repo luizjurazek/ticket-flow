@@ -3,6 +3,11 @@ import { User } from '@/modules/users/domain/entities/user.entity';
 
 export class InMemoryUserRepository implements IUserRepository {
   private users: User[] = [];
+  private userIdsWithTickets = new Set<string>();
+
+  markUserWithTickets(userId: string): void {
+    this.userIdsWithTickets.add(userId);
+  }
 
   async create(user: User): Promise<User> {
     this.users.push(user);
@@ -27,6 +32,7 @@ export class InMemoryUserRepository implements IUserRepository {
 
   async delete(id: string): Promise<void> {
     this.users = this.users.filter((user) => user.id !== id);
+    this.userIdsWithTickets.delete(id);
   }
 
   async findAll(): Promise<User[]> {
@@ -34,8 +40,6 @@ export class InMemoryUserRepository implements IUserRepository {
   }
 
   async hasTickets(id: string): Promise<boolean> {
-    const user = await this.findById(id);
-    if (!user) return false;
-    return user.tickets?.length > 0;
+    return this.userIdsWithTickets.has(id);
   }
 }
