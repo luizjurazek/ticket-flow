@@ -1,5 +1,5 @@
 import { DeleteUserUseCase } from './delete-user.usecase';
-import { CreateUserUseCase } from '../create-user/create-user-usecase';
+import { CreateUserUseCase } from '../create-user/create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { AppError } from '@/shared/errors/app-error';
 import { User } from '@/modules/users/domain/entities/user.entity';

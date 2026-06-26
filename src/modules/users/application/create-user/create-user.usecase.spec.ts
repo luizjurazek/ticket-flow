@@ -1,4 +1,4 @@
-import { CreateUserUseCase } from './create-user-usecase';
+import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { AppError } from '@/shared/errors/app-error';
 import { faker } from '@faker-js/faker';

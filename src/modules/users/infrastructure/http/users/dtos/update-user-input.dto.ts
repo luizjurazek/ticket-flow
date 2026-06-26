@@ -1,6 +1,4 @@
-import { Expose, plainToInstance } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
-import { User } from '../../domain/entities/user.entity';
 
 export class UpdateUserDTO {
   @IsString()
