@@ -8,12 +8,10 @@ import { faker } from '@faker-js/faker';
 describe('DeleteUserUseCase', () => {
   let userRepository: InMemoryUserRepository;
   let deleteUserUseCase: DeleteUserUseCase;
-  let createUserUseCase: CreateUserUseCase;
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
     deleteUserUseCase = new DeleteUserUseCase(userRepository);
-    createUserUseCase = new CreateUserUseCase(userRepository);
   });
 
   async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
