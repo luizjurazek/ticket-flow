@@ -1,5 +1,5 @@
-import { IUpdateUserData } from '../../domain/entities/UserEntity';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
+import { IUpdateUserData } from '../../domain/entities/user.entity';
+import { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import { UpdateUserOutputDTO } from './dto';
 
 export class UpdateUserUseCase {

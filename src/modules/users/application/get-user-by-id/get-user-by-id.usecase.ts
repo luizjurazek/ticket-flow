@@ -1,5 +1,5 @@
 import { AppError } from '../../../../shared/errors/AppError';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
+import { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import { GetUserByIdOutputDTO } from './dto';
 
 export class GetUserByIdUseCase {

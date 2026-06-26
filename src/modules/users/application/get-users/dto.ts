@@ -1,5 +1,5 @@
 import { Expose, plainToInstance } from 'class-transformer';
-import { User } from '../../domain/entities/UserEntity';
+import { User } from '../../domain/entities/user.entity';
 
 export class GetUsersOutputDTO {
   @Expose() id!: string;

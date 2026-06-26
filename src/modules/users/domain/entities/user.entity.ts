@@ -1,5 +1,5 @@
 import { AppError } from '@/shared/errors/AppError';
-import { Ticket } from '../../../tickets/domain/TicketEntity';
+import { Ticket } from '../../../tickets/domain/ticket.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ICreateUserData {

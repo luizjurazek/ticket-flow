@@ -1,6 +1,6 @@
 import { prisma } from '../../../../../shared/database/prisma';
-import { PrismaUserRepository } from '../../prisma/PrismaUserRepository';
-import { UserController } from '../UserController';
+import { PrismaUserRepository } from '../../prisma/prisma-user.repository';
+import { UserController } from '../user.controller';
 import { CreateUserUseCase } from '../../../application/create-user/create-user-usecase';
 import { UpdateUserUseCase } from '../../../application/update-user/update-user.usecase';
 import { GetUsersUseCase } from '../../../application/get-users/get-user.usecase';

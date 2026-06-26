@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { User } from '../../domain/entities/UserEntity';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { Ticket } from '../../../tickets/domain/TicketEntity';
+import { User } from '../../domain/entities/user.entity';
+import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { Ticket } from '../../../tickets/domain/ticket.entity';
 
 type PrismaUserWithTickets = Prisma.UserGetPayload<{
   include: { tickets: true };

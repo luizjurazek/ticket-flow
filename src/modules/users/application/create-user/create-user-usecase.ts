@@ -1,5 +1,5 @@
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { ICreateUserData, User } from '../../domain/entities/UserEntity';
+import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { ICreateUserData, User } from '../../domain/entities/user.entity';
 import { AppError } from '../../../../shared/errors/AppError';
 
 export class CreateUserUseCase {
