@@ -13,15 +13,6 @@ describe('CreateUserUseCase', () => {
     createUserUseCase = new CreateUserUseCase(userRepository);
   });
 
-  async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return await userRepository.create(
-      User.create({
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-      }),
-    );
-  }
-
   it('should create a new user successfully', async () => {
     const user = await createUserUseCase.execute({
       name: faker.person.fullName(),
@@ -35,28 +26,29 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should throw error when user already exists', async () => {
-    const user = await createUser(userRepository);
+    const user = await createUserUseCase.execute({
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+    });
+
     await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(AppError);
   });
 
   it('should throw error when email is empty', async () => {
-    const user = await createUser(userRepository);
-    user.email = '';
-
-    await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(AppError);
+    await expect(createUserUseCase.execute({ name: faker.person.fullName(), email: '' })).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 
   it('should throw error when name is empty', async () => {
-    const user = await createUser(userRepository);
-    user.name = '';
-
-    await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(AppError);
+    await expect(createUserUseCase.execute({ name: '', email: faker.internet.email() })).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 
   it('should throw error when email is invalid', async () => {
-    const user = await createUser(userRepository);
-    user.email = 'invalid-email';
-
-    await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(AppError);
+    await expect(
+      createUserUseCase.execute({ name: faker.person.fullName(), email: 'invalid-email' }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
