@@ -40,12 +40,11 @@ export class PrismaUserRepository implements IUserRepository {
   async findById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { tickets: true },
     });
 
     if (!user) return null;
 
-    return this.mapToEntity(user);
+    return new User(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -56,25 +55,16 @@ export class PrismaUserRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { tickets: true },
     });
 
     if (!user) return null;
 
-    return this.mapToEntity(user);
+    return new User(user);
   }
 
   async delete(id: string): Promise<void> {
     await this.prisma.user.delete({
       where: { id },
     });
-  }
-
-  private mapToEntity(prismaUser: PrismaUserWithTickets): User {
-    const tickets = prismaUser.tickets.map(
-      (t) => new Ticket(t.id, t.message, t.channel, t.priority, t.status, t.userId, t.createdAt, t.updatedAt),
-    );
-
-    return new User(prismaUser);
   }
 }

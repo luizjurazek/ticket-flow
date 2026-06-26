@@ -10,6 +10,13 @@ export class UpdateUserUseCase {
     const user = await this.userRepository.findById(id);
     if (!user) throw new AppError('User not found', 404);
 
+    if (data.email && data.email !== user.email) {
+      const userWithEmail = await this.userRepository.findByEmail(data.email);
+      if (userWithEmail) {
+        throw new AppError('Email already in use', 400);
+      }
+    }
+
     user.update(data);
     await this.userRepository.update(user);
 
