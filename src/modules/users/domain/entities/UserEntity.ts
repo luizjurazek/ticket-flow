@@ -1,3 +1,4 @@
+import { AppError } from '@/shared/errors/AppError';
 import { Ticket } from '../../../tickets/domain/TicketEntity';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,10 +29,23 @@ export class User {
     this.updatedAt = props.updatedAt ?? new Date();
   }
   static create(userData: ICreateUserData): User {
+    if (!userData.name || !userData.email) {
+      throw new AppError('Name and email are required', 400);
+    }
+    if (!userData.email.includes('@')) {
+      throw new AppError('Invalid email', 400);
+    }
     return new User(userData);
   }
 
   update(userData: IUpdateUserData): void {
+    if (!userData.name && !userData.email) {
+      throw new AppError('Name or email is required', 400);
+    }
+    if (userData.email && !userData.email.includes('@')) {
+      throw new AppError('Invalid email', 400);
+    }
+
     if (userData.name) this.name = userData.name;
     if (userData.email) this.email = userData.email;
     this.updatedAt = new Date();
