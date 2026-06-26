@@ -1,11 +1,11 @@
 import { prisma } from '../../../../../shared/database/prisma';
 import { PrismaUserRepository } from '../../prisma/PrismaUserRepository';
 import { UserController } from '../UserController';
-import { CreateUserUseCase } from '../../../application/create-user/CreateUserUseCase';
-import { UpdateUserUseCase } from '../../../application/update-user/UpdateUserUseCase';
-import { GetUsersUseCase } from '../../../application/get-users/GetUsersUseCase';
-import { GetUserByIdUseCase } from '../../../application/get-user-by-id/GetUserByIdUseCase';
-import { DeleteUserUseCase } from '../../../application/detete-user/DeleteUserUseCase';
+import { CreateUserUseCase } from '../../../application/create-user/create-user-usecase';
+import { UpdateUserUseCase } from '../../../application/update-user/update-user.usecase';
+import { GetUsersUseCase } from '../../../application/get-users/get-user.usecase';
+import { GetUserByIdUseCase } from '../../../application/get-user-by-id/get-user-by-id.usecase';
+import { DeleteUserUseCase } from '../../../application/detete-user/delete-user.usecase';
 
 export function makeUserController(): UserController {
   const userRepository = new PrismaUserRepository(prisma);

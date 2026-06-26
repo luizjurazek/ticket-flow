@@ -1,4 +1,4 @@
-import { CreateUserUseCase } from './CreateUserUseCase';
+import { CreateUserUseCase } from './create-user-usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/InMemoryUserRepository';
 import { AppError } from '@/shared/errors/AppError';
 
