@@ -1,6 +1,5 @@
-import { faker } from '@faker-js/faker';
-import { User } from '@/modules/users/domain/entities/user.entity';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
+import { createUser } from '@/test/helpers/user.factory';
 import { GetUsersUseCase } from './get-users.usecase';
 
 describe('GetUsersUseCase', () => {
@@ -11,15 +10,6 @@ describe('GetUsersUseCase', () => {
     userRepository = new InMemoryUserRepository();
     getUsersUseCase = new GetUsersUseCase(userRepository);
   });
-
-  async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return userRepository.create(
-      User.create({
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-      }),
-    );
-  }
 
   it('should get all users successfully', async () => {
     const firstUser = await createUser(userRepository);

@@ -1,8 +1,7 @@
 import { GetUserByIdUseCase } from './get-user-by-id.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { HttpStatus } from '@/shared/http/http-status';
-import { faker } from '@faker-js/faker';
-import { User } from '@/modules/users/domain/entities/user.entity';
+import { createUser } from '@/test/helpers/user.factory';
 
 describe('GetUserByIdUseCase', () => {
   let userRepository: InMemoryUserRepository;
@@ -14,12 +13,7 @@ describe('GetUserByIdUseCase', () => {
   });
 
   it('should get a user by id successfully', async () => {
-    const user = await userRepository.create(
-      User.create({
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-      }),
-    );
+    const user = await createUser(userRepository);
 
     const userById = await getUserByIdUseCase.execute(user.id);
 

@@ -1,8 +1,7 @@
 import { DeleteUserUseCase } from './delete-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { HttpStatus } from '@/shared/http/http-status';
-import { User } from '@/modules/users/domain/entities/user.entity';
-import { faker } from '@faker-js/faker';
+import { createUser } from '@/test/helpers/user.factory';
 
 describe('DeleteUserUseCase', () => {
   let userRepository: InMemoryUserRepository;
@@ -12,10 +11,6 @@ describe('DeleteUserUseCase', () => {
     userRepository = new InMemoryUserRepository();
     deleteUserUseCase = new DeleteUserUseCase(userRepository);
   });
-
-  async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return userRepository.create(User.create({ name: faker.person.fullName(), email: faker.internet.email() }));
-  }
 
   it('should delete a user successfully', async () => {
     const user = await createUser(userRepository);

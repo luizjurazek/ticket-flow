@@ -14,7 +14,7 @@ export class UpdateUserUseCase {
     if (data.email && data.email !== user.email) {
       const userWithEmail = await this.userRepository.findByEmail(data.email);
       if (userWithEmail) {
-        throw new AppError('Email already in use', HttpStatus.BAD_REQUEST);
+        throw new AppError('Email already exists', HttpStatus.BAD_REQUEST);
       }
     }
 

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { User } from '@/modules/users/domain/entities/user.entity';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { HttpStatus } from '@/shared/http/http-status';
+import { createUser } from '@/test/helpers/user.factory';
 import { UpdateUserUseCase } from './update-user.usecase';
 
 describe('UpdateUserUseCase', () => {
@@ -12,10 +12,6 @@ describe('UpdateUserUseCase', () => {
     userRepository = new InMemoryUserRepository();
     updateUserUseCase = new UpdateUserUseCase(userRepository);
   });
-
-  async function createUser(userRepository: InMemoryUserRepository): Promise<User> {
-    return userRepository.create(User.create({ name: faker.person.fullName(), email: faker.internet.email() }));
-  }
 
   it('should update user name successfully', async () => {
     const user = await createUser(userRepository);
@@ -63,12 +59,12 @@ describe('UpdateUserUseCase', () => {
   });
 
   it('should throw error when user is not found', async () => {
-    await expect(
-      updateUserUseCase.execute('non-existent-id', { name: faker.person.fullName() }),
-    ).rejects.toMatchObject({
-      message: 'User not found',
-      statusCode: HttpStatus.NOT_FOUND,
-    });
+    await expect(updateUserUseCase.execute('non-existent-id', { name: faker.person.fullName() })).rejects.toMatchObject(
+      {
+        message: 'User not found',
+        statusCode: HttpStatus.NOT_FOUND,
+      },
+    );
   });
 
   it('should throw error when email is already in use', async () => {
@@ -76,7 +72,7 @@ describe('UpdateUserUseCase', () => {
     const secondUser = await createUser(userRepository);
 
     await expect(updateUserUseCase.execute(firstUser.id, { email: secondUser.email })).rejects.toMatchObject({
-      message: 'Email already in use',
+      message: 'Email already exists',
       statusCode: HttpStatus.BAD_REQUEST,
     });
   });

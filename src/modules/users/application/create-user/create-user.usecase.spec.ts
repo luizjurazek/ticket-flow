@@ -1,8 +1,7 @@
 import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { AppError } from '@/shared/errors/app-error';
 import { HttpStatus } from '@/shared/http/http-status';
-import { faker } from '@faker-js/faker';
+import { buildUserData } from '@/test/helpers/user.factory';
 
 describe('CreateUserUseCase', () => {
   let userRepository: InMemoryUserRepository;
@@ -14,10 +13,7 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should create a new user successfully', async () => {
-    const userData = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-    };
+    const userData = buildUserData();
 
     const user = await createUserUseCase.execute(userData);
 
@@ -27,10 +23,7 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should throw error when user already exists', async () => {
-    const userData = {
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-    };
+    const userData = buildUserData();
 
     await createUserUseCase.execute(userData);
     await expect(createUserUseCase.execute(userData)).rejects.toMatchObject({
