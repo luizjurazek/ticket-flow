@@ -37,6 +37,7 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",

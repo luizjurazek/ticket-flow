@@ -12,7 +12,7 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['/node_modules/(?!(uuid)/)'],
+  transformIgnorePatterns: ['/node_modules/(?!(uuid|@faker-js/faker)/)'],
   testMatch: ['**/*.spec.ts'],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 };
