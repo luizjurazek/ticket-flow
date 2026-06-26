@@ -16,54 +16,29 @@ export class UsersController {
   ) {}
 
   async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      const { name, email } = req.body;
-      const user = await this.createUserUseCase.execute({ name, email });
-
-      return res.status(HttpStatus.CREATED).json(user);
-    } catch (error) {
-      next(error);
-    }
+    const { name, email } = req.body;
+    const user = await this.createUserUseCase.execute({ name, email });
+    return res.status(HttpStatus.CREATED).json(user);
   }
 
   async findById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      const user = await this.getUserByIdUseCase.execute(req.params.id as string);
-
-      return res.status(HttpStatus.OK).json(user);
-    } catch (error) {
-      next(error);
-    }
+    const user = await this.getUserByIdUseCase.execute(req.params.id as string);
+    return res.status(HttpStatus.OK).json(user);
   }
 
   async findAll(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      const users = await this.getUsersUseCase.execute();
-
-      return res.status(HttpStatus.OK).json(users);
-    } catch (error) {
-      next(error);
-    }
+    const users = await this.getUsersUseCase.execute();
+    return res.status(HttpStatus.OK).json(users);
   }
 
   async update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      const { name, email } = req.body;
-      const user = await this.updateUserUseCase.execute(req.params.id as string, { name, email });
-
-      return res.status(HttpStatus.OK).json(user);
-    } catch (error) {
-      next(error);
-    }
+    const { name, email } = req.body;
+    const user = await this.updateUserUseCase.execute(req.params.id as string, { name, email });
+    return res.status(HttpStatus.OK).json(user);
   }
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      await this.deleteUserUseCase.execute(req.params.id as string);
-
-      return res.status(HttpStatus.NO_CONTENT).send();
-    } catch (error) {
-      next(error);
-    }
+    await this.deleteUserUseCase.execute(req.params.id as string);
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
 }
