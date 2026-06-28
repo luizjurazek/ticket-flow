@@ -22,6 +22,8 @@ export class Ticket {
   public status: TicketStatus;
   public userId: string;
   public manuallyReview: boolean;
+  public reviewedBy: string | null;
+  public reviewedAt: Date | null;
 
   public createdAt: Date;
   public updatedAt: Date;
@@ -34,6 +36,9 @@ export class Ticket {
     this.status = props.status ?? TicketStatus.OPEN;
     this.userId = props.userId;
     this.manuallyReview = props.manuallyReview ?? false;
+    this.reviewedBy = props.reviewedBy ?? null;
+    this.reviewedAt = props.reviewedAt ?? null;
+
     this.createdAt = props.createdAt ?? new Date();
     this.updatedAt = props.updatedAt ?? new Date();
   }

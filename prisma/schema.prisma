@@ -30,7 +30,7 @@ model Ticket {
   status TicketStatus @default(open)
   manuallyReview Boolean @default(false)
   reviewedAt DateTime? @db.Timestamp(0)
-  reviewedBy String?
+  reviewedBy String? @db.Text
   
   userId String
   user User @relation(fields: [userId], references: [id])
