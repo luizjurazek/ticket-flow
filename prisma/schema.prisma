@@ -25,9 +25,12 @@ model User {
 model Ticket {
   id String @id @default(uuid())
   message String
-  channel String
-  priority String
-  status String
+  channel TicketChannel
+  priority TicketPriority
+  status TicketStatus @default(open)
+  manuallyReview Boolean @default(false)
+  reviewedAt DateTime? @db.Timestamp(0)
+  reviewedBy String?
   
   userId String
   user User @relation(fields: [userId], references: [id])
@@ -35,3 +38,25 @@ model Ticket {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum TicketStatus {
+  open
+  closed
+  in_progress
+}
+
+enum TicketPriority {
+  low
+  medium
+  high
+}
+
+enum TicketChannel {
+  ombudsman
+  customer_service
+  technical_support
+  finance
+  out_of_scope
+}
+
+
