@@ -1,5 +1,5 @@
 import { prisma } from '@/shared/database/prisma';
-import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/prisma-user.repository';
+import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/prisma-users.repository';
 import { UsersController } from '@/modules/users/infrastructure/http/users.controller';
 import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user.usecase';
 import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
