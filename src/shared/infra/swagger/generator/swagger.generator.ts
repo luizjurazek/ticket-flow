@@ -26,9 +26,10 @@ export class SwaggerGenerator {
           description: response.description,
         };
         if (response.type) {
+          const schema = DtoToSchema.parse(response.type);
           responseEntry.content = {
             'application/json': {
-              schema: DtoToSchema.parse(response.type),
+              schema: response.isArray ? { type: 'array', items: schema } : schema,
             },
           };
         }

@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@swagger/(.*)$': '<rootDir>/src/shared/infra/swagger/$1',
   },
   transform: {
     '^.+\\.(ts|js)$': [
