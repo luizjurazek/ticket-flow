@@ -7,14 +7,20 @@ import { GetUsersUseCase } from '@/modules/users/application/get-users/get-users
 import { GetUserByIdUseCase } from '@/modules/users/application/get-user-by-id/get-user-by-id.usecase';
 import { DeleteUserUseCase } from '@/modules/users/application/delete-user/delete-user.usecase';
 
+import { ControllerRegistry } from '@/shared/infra/swagger/registry/controller.registry';
+
 export function makeUsersController(): UsersController {
   const userRepository = new PrismaUserRepository(prisma);
 
-  return new UsersController(
+  const controller = new UsersController(
     new CreateUserUseCase(userRepository),
     new UpdateUserUseCase(userRepository),
     new GetUsersUseCase(userRepository),
     new GetUserByIdUseCase(userRepository),
     new DeleteUserUseCase(userRepository),
   );
+
+  ControllerRegistry.register(controller);
+
+  return controller;
 }
