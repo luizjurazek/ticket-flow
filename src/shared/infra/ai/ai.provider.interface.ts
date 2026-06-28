@@ -1,3 +1,3 @@
-export interface IGeminiProvider {
+export interface IAIProvider {
   generateText(prompt: string): Promise<string>;
 }

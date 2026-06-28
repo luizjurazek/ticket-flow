@@ -1,10 +1,10 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
-import { IGeminiProvider } from './gemini.provider.interface';
+import { IAIProvider } from './ai.provider.interface';
 import { AppError } from '@/shared/errors/app-error';
 import { HttpStatus } from '@/shared/http/http-status';
 import { StructuredLogger } from '../logger/logger';
 
-export class GeminiProvider implements IGeminiProvider {
+export class GeminiProvider implements IAIProvider {
   private genAI: GoogleGenerativeAI;
   private model: GenerativeModel;
 
