@@ -2,8 +2,19 @@ import { ExploredEndpoint } from '@swagger/types/explored-endpoint.type';
 import { DEFAULT_RESPONSES } from '@swagger/defaults/default-response';
 import { DtoToSchema } from '@swagger/utils/dto-to-schema.util';
 
+interface SwaggerTag {
+  name: string;
+}
+
 export class SwaggerGenerator {
   generate(endpoints: ExploredEndpoint[]) {
+    return {
+      paths: this.generatePaths(endpoints),
+      tags: this.collectTags(endpoints),
+    };
+  }
+
+  private generatePaths(endpoints: ExploredEndpoint[]) {
     const paths: Record<string, any> = {};
 
     for (const endpoint of endpoints) {
@@ -40,6 +51,10 @@ export class SwaggerGenerator {
         summary: endpoint.operation?.summary,
         description: endpoint.operation?.description,
 
+        ...(endpoint.tags?.length && {
+          tags: endpoint.tags,
+        }),
+
         ...(endpoint.params?.length && {
           parameters: endpoint.params.map((param) => ({
             name: param.name,
@@ -67,5 +82,15 @@ export class SwaggerGenerator {
     }
 
     return paths;
+  }
+
+  private collectTags(endpoints: ExploredEndpoint[]): SwaggerTag[] {
+    const tagNames = new Set<string>();
+
+    for (const endpoint of endpoints) {
+      endpoint.tags?.forEach((tag) => tagNames.add(tag));
+    }
+
+    return [...tagNames].sort().map((name) => ({ name }));
   }
 }

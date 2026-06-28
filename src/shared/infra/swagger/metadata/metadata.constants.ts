@@ -5,4 +5,5 @@ export const METADATA_KEYS = {
   PROPERTY: Symbol('swagger:property'),
   BODY: Symbol('swagger:body'),
   PARAMS: Symbol('swagger:params'),
+  TAGS: Symbol('swagger:tags'),
 } as const;

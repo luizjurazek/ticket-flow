@@ -12,8 +12,8 @@ export class SwaggerModule {
 
     const endpoints = ControllerRegistry.getAll().flatMap((controller) => explorer.explore(controller));
 
-    const paths = generator.generate(endpoints);
-    const document = createSwaggerDocument(paths);
+    const { paths, tags } = generator.generate(endpoints);
+    const document = createSwaggerDocument(paths, tags);
 
     app.use('/docs', swaggerUi.serve, swaggerUi.setup(document));
   }

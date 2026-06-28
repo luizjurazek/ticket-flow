@@ -11,4 +11,5 @@ export interface ExploredEndpoint {
   responses?: ApiResponseMetadata[];
   body?: ApiBodyMetadata;
   params?: ApiParamMetadata[];
+  tags?: string[];
 }
