@@ -10,6 +10,8 @@ export class CreateTicketUseCase {
   ) {}
 
   async execute(data: ICreateTicketInput): Promise<Ticket> {
+    // TODO: add a queue system to avoid crashing the system
+    // and overloading the AI model
     const classification = await this.ticketClassifier.classify(data.message);
     const ticket = Ticket.create({
       message: data.message,
