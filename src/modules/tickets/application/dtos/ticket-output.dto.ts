@@ -4,13 +4,14 @@ import { ApiProperty } from '@swagger/decorators';
 
 export class TicketOutputDTO {
   @ApiProperty() @Expose() id!: string;
+  @ApiProperty() @Expose() userId!: string;
   @ApiProperty() @Expose() message!: string;
   @ApiProperty() @Expose() channel!: string;
   @ApiProperty() @Expose() priority!: string;
   @ApiProperty() @Expose() status!: string;
   @ApiProperty() @Expose() manuallyReview!: boolean;
-  @ApiProperty() @Expose() userId!: string;
   @ApiProperty() @Expose() reviedBy!: string;
+  @ApiProperty() @Expose() reviewedAt!: Date;
 
   @ApiProperty() @Expose() createdAt!: Date;
   @ApiProperty() @Expose() updatedAt!: Date;

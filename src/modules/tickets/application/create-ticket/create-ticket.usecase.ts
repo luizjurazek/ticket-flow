@@ -2,6 +2,7 @@ import { ITicketRepository } from '@/modules/tickets/domain/repositories/ticket.
 import { Ticket } from '@/modules/tickets/domain/entities/ticket.entity';
 import { ICreateTicketInput } from '@/modules/tickets/domain/entities/ticket.entity';
 import { IClassifyTicketService } from '@/modules/tickets/domain/services/classify-ticket.service.interface';
+import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
 
 export class CreateTicketUseCase {
   constructor(
@@ -9,7 +10,7 @@ export class CreateTicketUseCase {
     private readonly ticketClassifier: IClassifyTicketService,
   ) {}
 
-  async execute(data: ICreateTicketInput): Promise<Ticket> {
+  async execute(data: ICreateTicketInput): Promise<TicketOutputDTO> {
     // TODO: add a queue system to avoid crashing the system
     // and overloading the AI model
     const classification = await this.ticketClassifier.classify(data.message);
@@ -22,6 +23,6 @@ export class CreateTicketUseCase {
     });
 
     const createdTicket = await this.ticketRepository.create(ticket);
-    return createdTicket;
+    return TicketOutputDTO.fromEntity(createdTicket);
   }
 }

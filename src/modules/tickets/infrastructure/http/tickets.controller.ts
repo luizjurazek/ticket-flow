@@ -14,8 +14,8 @@ export class TicketsController {
     path: '/tickets',
   })
   @ApiOperation({
-    summary: 'Create a new user',
-    description: 'Creates a new user with the given name and email',
+    summary: 'Create a ticket',
+    description: 'Creates a new ticket with the given message and user ID',
   })
   @ApiResponse({
     statusCode: HttpStatus.CREATED,
