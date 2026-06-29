@@ -6,6 +6,7 @@ import { CreateTicketInputDTO } from '@/modules/tickets/infrastructure/http/dtos
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
 import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-by-id/get-ticket-by-id.usecase';
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
+import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
 
 @ApiTags('Tickets')
 export class TicketsController {
@@ -13,6 +14,7 @@ export class TicketsController {
     private readonly createTicketUseCase: CreateTicketUseCase,
     private readonly getTicketsUseCase: GetTicketsUseCase,
     private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
+    private readonly getTicketsByUserUseCase: GetTicketsByUserUseCase,
   ) {}
 
   @ApiRoute({
@@ -82,5 +84,31 @@ export class TicketsController {
     console.log(req.params.id);
     const ticket = await this.getTicketByIdUseCase.execute(req.params.id as string);
     return res.status(HttpStatus.OK).json(ticket);
+  }
+
+  @ApiRoute({
+    method: 'get',
+    path: '/tickets/user/{userId}',
+  })
+  @ApiOperation({
+    summary: 'Get tickets by user ID',
+    description: 'Gets tickets by user ID',
+  })
+  @ApiResponse({
+    statusCode: HttpStatus.OK,
+    description: 'Tickets found successfully',
+    type: TicketOutputDTO,
+    isArray: true,
+  })
+  @ApiParams({
+    name: 'userId',
+    in: 'path',
+    description: 'User ID',
+    required: true,
+    type: 'string',
+  })
+  async getByUserId(req: Request, res: Response): Promise<Response | void> {
+    const tickets = await this.getTicketsByUserUseCase.execute(req.params.userId as string);
+    return res.status(HttpStatus.OK).json(tickets);
   }
 }
