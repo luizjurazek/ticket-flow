@@ -1,5 +1,5 @@
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ICreateUserData {

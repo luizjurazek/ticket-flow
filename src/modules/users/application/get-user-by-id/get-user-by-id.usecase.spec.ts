@@ -1,6 +1,6 @@
 import { GetUserByIdUseCase } from './get-user-by-id.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { createUser } from '@/test/helpers/user.factory';
 
 describe('GetUserByIdUseCase', () => {

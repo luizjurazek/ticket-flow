@@ -1,5 +1,5 @@
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 import { IUserTicketChecker } from '@/modules/users/domain/services/user-ticket-checker.interface';
 

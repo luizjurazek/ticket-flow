@@ -1,4 +1,4 @@
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { AppError } from '@/shared/errors/app-error';
 import rateLimit from 'express-rate-limit';
 

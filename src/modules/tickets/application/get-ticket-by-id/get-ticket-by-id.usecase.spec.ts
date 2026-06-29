@@ -1,6 +1,6 @@
 import { GetTicketByIdUseCase } from './get-ticket-by-id.usecase';
 import { InMemoryTicketRepository } from '@/modules/tickets/domain/repositories/fakes/in-memory-ticket.repository';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { createTicket } from '@/test/helpers/ticket.factory';
 
 describe('GetTicketByIdUseCase', () => {

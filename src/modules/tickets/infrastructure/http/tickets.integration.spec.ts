@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { prisma } from '@/shared/database/prisma';
 import { resetDatabase } from '@/test/integration/reset-database';
 import { ticketClassifierScenarios } from '@/test/helpers/ticket-classifier-scenarios';

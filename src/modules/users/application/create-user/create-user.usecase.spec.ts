@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from './create-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { buildUserData } from '@/test/helpers/user.factory';
 
 describe('CreateUserUseCase', () => {

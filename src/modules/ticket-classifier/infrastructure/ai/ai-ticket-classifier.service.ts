@@ -2,7 +2,7 @@ import { IAIProvider } from '@/shared/infra/ai/ai.provider.interface';
 import { ITicketClassifier } from '@/modules/ticket-classifier/domain/services/ticket-classifier.interface';
 import { ITicketClassification } from '@/shared/domain/ticket/ticket-classification.interface';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { buildTicketClassifierPrompt } from './prompts/ticket-classifier.prompt';
 import { TicketChannel, TicketPriority } from '@/shared/domain/ticket/ticket.enums';
 

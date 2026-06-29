@@ -2,7 +2,7 @@ import request from 'supertest';
 import { faker } from '@faker-js/faker';
 import { app } from '@/app';
 import { prisma } from '@/shared/database/prisma';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { resetDatabase } from '@/test/integration/reset-database';
 
 async function createUserViaApi(overrides?: { name?: string; email?: string }) {

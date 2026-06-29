@@ -1,4 +1,4 @@
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 
 export class AppError extends Error {
   public readonly statusCode: number;

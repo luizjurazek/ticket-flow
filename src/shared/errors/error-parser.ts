@@ -1,6 +1,6 @@
 import { AppError } from './app-error';
 import { StructuredLogger } from '@/shared/infra/logger/logger';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { LogContext } from '../infra/logger/log-context.interface';
 
 interface ParsedError {

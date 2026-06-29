@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { IAIProvider } from './ai.provider.interface';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { StructuredLogger } from '../logger/logger';
 
 const GEMINI_TIMEOUT_MS = 10_000;

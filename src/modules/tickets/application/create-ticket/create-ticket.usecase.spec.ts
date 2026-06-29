@@ -6,7 +6,7 @@ import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fake
 import { buildCreateTicketInput, buildTicketClassification } from '@/test/helpers/ticket.factory';
 import { createUser } from '@/test/helpers/user.factory';
 import { TicketChannel, TicketPriority, TicketStatus } from '@/shared/domain/ticket/ticket.enums';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 
 describe('CreateTicketUseCase', () => {
   let ticketRepository: InMemoryTicketRepository;

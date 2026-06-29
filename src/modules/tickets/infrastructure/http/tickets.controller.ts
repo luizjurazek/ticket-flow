@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateTicketUseCase } from '@/modules/tickets/application/create-ticket/create-ticket.usecase';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { ApiOperation, ApiTags, ApiRoute, ApiBody, ApiResponse, ApiParams } from '@swagger/decorators';
 import { CreateTicketInputDTO } from '@/modules/tickets/infrastructure/http/dtos/create-ticket-input.dto';
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';

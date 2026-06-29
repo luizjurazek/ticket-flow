@@ -5,7 +5,7 @@ import { IClassifyTicketService } from '@/modules/tickets/domain/services/classi
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
 import { IUserLookup } from '@/modules/tickets/domain/services/user-lookup.interface';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 
 export class CreateTicketUseCase {
   constructor(

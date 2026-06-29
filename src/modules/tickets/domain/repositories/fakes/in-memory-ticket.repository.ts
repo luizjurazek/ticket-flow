@@ -2,7 +2,7 @@ import { ITicketRepository } from '@/modules/tickets/domain/repositories/ticket.
 import { Ticket } from '@/modules/tickets/domain/entities/ticket.entity';
 import { TicketStatus } from '@/shared/domain/ticket/ticket.enums';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 
 export class InMemoryTicketRepository implements ITicketRepository {
   private tickets: Ticket[] = [];

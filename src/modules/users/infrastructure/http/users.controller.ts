@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { CreateUserUseCase } from '@/modules/users/application/create-user/create-user.usecase';
 import { UpdateUserUseCase } from '@/modules/users/application/update-user/update-user.usecase';
 import { GetUsersUseCase } from '@/modules/users/application/get-users/get-users.usecase';

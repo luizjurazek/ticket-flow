@@ -2,7 +2,7 @@ import { DeleteUserUseCase } from './delete-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { UserTicketCheckerAdapter } from '@/modules/users/infrastructure/adapters/user-ticket-checker.adapter';
 import { InMemoryTicketRepository } from '@/modules/tickets/domain/repositories/fakes/in-memory-ticket.repository';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { createUser } from '@/test/helpers/user.factory';
 import { createTicket } from '@/test/helpers/ticket.factory';
 

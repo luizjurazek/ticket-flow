@@ -1,5 +1,5 @@
 import { InMemoryTicketRepository } from '@/modules/tickets/domain/repositories/fakes/in-memory-ticket.repository';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { TicketStatus } from '@/shared/domain/ticket/ticket.enums';
 import { createTicket } from '@/test/helpers/ticket.factory';
 import { UpdateTicketStatusUseCase } from './update-ticket-status.usecase';

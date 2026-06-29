@@ -1,7 +1,7 @@
 import { IUpdateUserData } from '@/modules/users/domain/entities/user.entity';
 import { IUserRepository } from '@/modules/users/domain/repositories/user.repository.interface';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { UserOutputDTO } from '../dtos/user-output.dto';
 
 export class UpdateUserUseCase {

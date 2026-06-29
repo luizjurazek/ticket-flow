@@ -1,7 +1,7 @@
 import { ITicketRepository } from '@/modules/tickets/domain/repositories/ticket.repository.interface';
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
 import { AppError } from '@/shared/errors/app-error';
-import { HttpStatus } from '@/shared/http/http-status';
+import { HttpStatus } from '@/shared/utils/http-status';
 import { TicketStatus } from '@/shared/domain/ticket/ticket.enums';
 
 export class UpdateTicketStatusUseCase {
