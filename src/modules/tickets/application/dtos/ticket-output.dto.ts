@@ -10,7 +10,7 @@ export class TicketOutputDTO {
   @ApiProperty() @Expose() priority!: string;
   @ApiProperty() @Expose() status!: string;
   @ApiProperty() @Expose() manuallyReview!: boolean;
-  @ApiProperty() @Expose() reviedBy!: string;
+  @ApiProperty() @Expose() reviewedBy!: string;
   @ApiProperty() @Expose() reviewedAt!: Date;
 
   @ApiProperty() @Expose() createdAt!: Date;
