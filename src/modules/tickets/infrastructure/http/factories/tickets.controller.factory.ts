@@ -9,7 +9,7 @@ import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
 import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
 import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/prisma-users.repository';
-import { UserLookupAdapter } from '@/modules/tickets/domain/services/adapters/user-lookup.adapter';
+import { UserLookupAdapter } from '@/modules/tickets/infrastructure/adapters/user-lookup.adapter';
 
 export function makeTicketsController(): TicketsController {
   const ticketRepository = new PrismaTicketsRepository(prisma);
