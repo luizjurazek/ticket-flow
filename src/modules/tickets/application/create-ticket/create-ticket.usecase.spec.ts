@@ -1,7 +1,7 @@
 import { CreateTicketUseCase } from './create-ticket.usecase';
 import { InMemoryTicketRepository } from '@/modules/tickets/domain/repositories/fakes/in-memory-ticket.repository';
 import { FakeClassifyTicketService } from '@/modules/tickets/domain/services/fakes/fake-classify-ticket.service';
-import { UserLookupAdapter } from '@/modules/tickets/domain/services/adapters/user-lookup.adapter';
+import { UserLookupAdapter } from '@/modules/tickets/infrastructure/adapters/user-lookup.adapter';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
 import { buildCreateTicketInput, buildTicketClassification } from '@/test/helpers/ticket.factory';
 import { createUser } from '@/test/helpers/user.factory';
