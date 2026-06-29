@@ -109,7 +109,7 @@ export class TicketsController {
     type: 'string',
   })
   async getByUserId(req: Request, res: Response): Promise<Response | void> {
-    const tickets = await this.getTicketsByUserUseCase.execute(req.params.userId as string);
+    const tickets = await this.getTicketsByUserUseCase.execute(req.params.id as string);
     return res.status(HttpStatus.OK).json(tickets);
   }
 
