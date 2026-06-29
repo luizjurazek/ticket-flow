@@ -83,7 +83,6 @@ export class TicketsController {
     type: 'string',
   })
   async getById(req: Request, res: Response): Promise<Response | void> {
-    console.log(req.params.id);
     const ticket = await this.getTicketByIdUseCase.execute(req.params.id as string);
     return res.status(HttpStatus.OK).json(ticket);
   }
