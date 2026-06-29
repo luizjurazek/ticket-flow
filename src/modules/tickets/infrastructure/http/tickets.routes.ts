@@ -4,11 +4,14 @@ import { validateDto, validateRequest } from '@/shared/infra/http/middlewares/va
 import { CreateTicketInputDTO } from './dtos/create-ticket-input.dto';
 import { IdParamDTO } from '@/shared/infra/http/dtos/id-param.dto';
 import { UpdateTicketStatusInputDTO } from './dtos/update-ticket-status-input.dto';
+import { ticketCreateRateLimit } from '@/shared/infra/http/middlewares/ticket-create-rate-limit.middleware';
 
 const ticketsRoutes = Router();
 const ticketsController = makeTicketsController();
 
-ticketsRoutes.post('/', validateDto(CreateTicketInputDTO), (req, res) => ticketsController.create(req, res));
+ticketsRoutes.post('/', ticketCreateRateLimit, validateDto(CreateTicketInputDTO), (req, res) =>
+  ticketsController.create(req, res),
+);
 ticketsRoutes.get('/', (req, res) => ticketsController.findAll(req, res));
 ticketsRoutes.get('/user/:id', validateDto(IdParamDTO, 'params'), (req, res) =>
   ticketsController.getByUserId(req, res),
