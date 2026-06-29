@@ -8,6 +8,7 @@ import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-b
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
 import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
+import { UpdateTicketStatusInputDTO } from './dtos/update-ticket-status-input.dto';
 
 @ApiTags('Tickets')
 export class TicketsController {
@@ -132,6 +133,10 @@ export class TicketsController {
     description: 'Ticket ID',
     required: true,
     type: 'string',
+  })
+  @ApiBody({
+    type: UpdateTicketStatusInputDTO,
+    description: 'Ticket status',
   })
   async updateStatus(req: Request, res: Response): Promise<Response | void> {
     const { status } = req.body;
