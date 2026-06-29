@@ -5,4 +5,4 @@ dotenv.config({ path: '.env.test', quiet: true });
 
 // Default value to avoid code breaking
 process.env.GEMINI_API_KEY ??= 'fake-key-for-testing';
-process.env.DATABASE_URL ??= 'postgresql://fake:fake@localhost:5432/fake';
+process.env.DATABASE_URL ??= 'postgresql://postgres:postgres@localhost:5432/ticket_flow_test';
