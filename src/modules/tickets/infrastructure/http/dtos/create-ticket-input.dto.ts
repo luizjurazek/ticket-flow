@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, IsUUID, MaxLength } from 'class-validator';
 import { ApiProperty } from '@swagger/decorators';
 
 export class CreateTicketInputDTO {
@@ -11,5 +11,6 @@ export class CreateTicketInputDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty({ message: 'Message is required' })
+  @MaxLength(2000, { message: 'Message must be less than 1000 characters' })
   message!: string;
 }
