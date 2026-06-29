@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, IsUUID } from 'class-validator';
 import { ApiProperty } from '@swagger/decorators';
 
 export class CreateTicketInputDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty({ message: 'User ID is required' })
-  @MinLength(36, { message: 'User ID must be a valid UUID' })
+  @IsUUID(4, { message: 'User ID must be a valid UUID' })
   userId!: string;
 
   @ApiProperty()
