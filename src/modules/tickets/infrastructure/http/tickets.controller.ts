@@ -5,12 +5,14 @@ import { ApiOperation, ApiTags, ApiRoute, ApiBody, ApiResponse, ApiParams } from
 import { CreateTicketInputDTO } from '@/modules/tickets/infrastructure/http/dtos/create-ticket-input.dto';
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
 import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-by-id/get-ticket-by-id.usecase';
+import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 
 @ApiTags('Tickets')
 export class TicketsController {
   constructor(
     private readonly createTicketUseCase: CreateTicketUseCase,
     private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
+    private readonly getTicketsUseCase: GetTicketsUseCase,
   ) {}
 
   @ApiRoute({
@@ -35,6 +37,25 @@ export class TicketsController {
     const ticket = await this.createTicketUseCase.execute({ userId, message });
 
     return res.status(HttpStatus.CREATED).json(ticket);
+  }
+
+  @ApiRoute({
+    method: 'get',
+    path: '/tickets',
+  })
+  @ApiOperation({
+    summary: 'Get all tickets',
+    description: 'Gets all tickets',
+  })
+  @ApiResponse({
+    statusCode: HttpStatus.OK,
+    description: 'Tickets found successfully',
+    type: TicketOutputDTO,
+    isArray: true,
+  })
+  async findAll(req: Request, res: Response): Promise<Response | void> {
+    const tickets = await this.getTicketsUseCase.execute();
+    return res.status(HttpStatus.OK).json(tickets);
   }
 
   @ApiRoute({

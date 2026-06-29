@@ -5,6 +5,7 @@ import { CreateTicketUseCase } from '@/modules/tickets/application/create-ticket
 import { makeTicketClassifier } from '@/modules/ticket-classifier/infrastructure/factories/ticket-classifier.factory';
 import { ControllerRegistry } from '@/shared/infra/swagger/registry/controller.registry';
 import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-by-id/get-ticket-by-id.usecase';
+import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 
 export function makeTicketsController(): TicketsController {
   const ticketRepository = new PrismaTicketsRepository(prisma);
@@ -13,6 +14,7 @@ export function makeTicketsController(): TicketsController {
   const controller = new TicketsController(
     new CreateTicketUseCase(ticketRepository, ticketClassifier),
     new GetTicketByIdUseCase(ticketRepository),
+    new GetTicketsUseCase(ticketRepository),
   );
 
   ControllerRegistry.register(controller);

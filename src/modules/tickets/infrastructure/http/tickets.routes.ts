@@ -8,6 +8,7 @@ const ticketsRoutes = Router();
 const ticketsController = makeTicketsController();
 
 ticketsRoutes.post('/', validateDto(CreateTicketInputDTO), (req, res) => ticketsController.create(req, res));
+ticketsRoutes.get('/', (req, res) => ticketsController.findAll(req, res));
 ticketsRoutes.get('/:id', validateDto(IdParamDTO, 'params'), (req, res) => ticketsController.getById(req, res));
 
 export { ticketsRoutes };
