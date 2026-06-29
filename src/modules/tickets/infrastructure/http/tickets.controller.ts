@@ -90,7 +90,7 @@ export class TicketsController {
 
   @ApiRoute({
     method: 'get',
-    path: '/tickets/user/{userId}',
+    path: '/tickets/user/{id}',
   })
   @ApiOperation({
     summary: 'Get tickets by user ID',
