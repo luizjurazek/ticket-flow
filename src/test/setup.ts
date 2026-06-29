@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 
+process.env.NODE_ENV ??= 'test';
 dotenv.config({ path: '.env.test', quiet: true });
 
 // Default value to avoid code breaking

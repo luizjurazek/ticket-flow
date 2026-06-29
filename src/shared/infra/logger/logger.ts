@@ -58,6 +58,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 export const Logger = winston.createLogger({
   level: resolveLogLevel(),
   levels,
+  silent: process.env.NODE_ENV === 'test',
   format: isProduction
     ? winston.format.combine(winston.format.timestamp(), winston.format.json())
     : winston.format.combine(
