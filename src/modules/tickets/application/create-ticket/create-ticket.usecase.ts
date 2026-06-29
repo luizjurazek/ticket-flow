@@ -3,16 +3,26 @@ import { Ticket } from '@/modules/tickets/domain/entities/ticket.entity';
 import { ICreateTicketInput } from '@/modules/tickets/domain/entities/ticket.entity';
 import { IClassifyTicketService } from '@/modules/tickets/domain/services/classify-ticket.service.interface';
 import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-output.dto';
+import { IUserLookup } from '@/modules/tickets/domain/services/user-lookup.interface';
+import { AppError } from '@/shared/errors/app-error';
+import { HttpStatus } from '@/shared/http/http-status';
 
 export class CreateTicketUseCase {
   constructor(
     private readonly ticketRepository: ITicketRepository,
     private readonly ticketClassifier: IClassifyTicketService,
+    private readonly userLookup: IUserLookup,
   ) {}
 
   async execute(data: ICreateTicketInput): Promise<TicketOutputDTO> {
     // TODO: add a queue system to avoid crashing the system
     // and overloading the AI model
+
+    const user = await this.userLookup.findById(data.userId);
+    if (!user) {
+      throw new AppError('User not found', HttpStatus.NOT_FOUND);
+    }
+
     const classification = await this.ticketClassifier.classify(data.message);
     const ticket = Ticket.create({
       message: data.message,
