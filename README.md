@@ -130,10 +130,19 @@ Lá você encontra a documentação interativa com os endpoints, payloads e resp
 
 ## Testes
 
-O projeto utiliza **Jest** para testes unitários.
+O projeto utiliza **Jest** com dois tipos de teste:
+
+| Tipo           | Arquivo                 | Banco                        | Docker           |
+| -------------- | ----------------------- | ---------------------------- | ---------------- |
+| **Unitário**   | `*.spec.ts`             | Não (repositórios in-memory) | Não              |
+| **Integração** | `*.integration.spec.ts` | Sim (`ticket_flow_test`)     | Sim (PostgreSQL) |
+
+### Testes unitários
+
+Testam use cases de forma isolada, com repositórios fake (`InMemoryUserRepository`, `InMemoryTicketRepository`). Não precisam de Docker nem banco de dados.
 
 ```bash
-# Rodar todos os testes
+# Rodar todos os testes unitários
 npm test
 
 # Modo watch
@@ -142,6 +151,73 @@ npm run test:watch
 # Com cobertura
 npm run test:cov
 ```
+
+Os testes unitários usam o arquivo `.env.test` apenas para variáveis padrão (como `GEMINI_API_KEY` fake). A `DATABASE_URL` não é utilizada nesse fluxo.
+
+### Testes de integração
+
+Testam a API de ponta a ponta via **supertest** (HTTP → middleware → controller → use case → Prisma → PostgreSQL). Os arquivos seguem o sufixo `*.integration.spec.ts` (ex.: `users.integration.spec.ts`).
+
+#### Pré-requisitos
+
+1. Dependências instaladas:
+
+   ```bash
+   npm install
+   npx prisma generate
+   ```
+
+2. PostgreSQL rodando via Docker:
+
+   ```bash
+   docker compose up -d database
+   ```
+
+3. Banco de teste `ticket_flow_test` disponível no mesmo Postgres:
+   - Em **volume novo**, o script `docker/postgres/init-test-db.sql` cria o banco automaticamente na primeira subida.
+   - Se o volume **já existia** antes desse script, crie o banco manualmente (apenas uma vez):
+
+     ```bash
+     docker compose exec database psql -U postgres -c "CREATE DATABASE ticket_flow_test;"
+     ```
+
+4. Arquivo `.env.test` na raiz do projeto (já incluído no repositório):
+
+   ```env
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ticket_flow_test
+   GEMINI_API_KEY=fake-key-for-testing
+   NODE_ENV=test
+   ```
+
+#### Rodando
+
+```bash
+npm run test:integration
+```
+
+O comando executa automaticamente:
+
+- **`globalSetup`** — aplica `prisma migrate deploy` no banco `ticket_flow_test`
+- **Testes** — cada spec limpa as tabelas no `beforeEach` via `resetDatabase()`
+- **`globalTeardown`** — fecha as conexões com o PostgreSQL
+
+#### Primeira vez após clonar o repositório
+
+```bash
+npm install
+npx prisma generate
+docker compose up -d database
+npm run test:integration
+```
+
+### Resumo dos scripts
+
+| Script                     | Descrição                                |
+| -------------------------- | ---------------------------------------- |
+| `npm test`                 | Testes unitários                         |
+| `npm run test:watch`       | Unitários em modo watch                  |
+| `npm run test:cov`         | Unitários com cobertura                  |
+| `npm run test:integration` | Testes de integração (HTTP + banco real) |
 
 ## Arquitetura
 
@@ -337,6 +413,8 @@ describe('CreateUserUseCase', () => {
 ```
 
 O `InMemoryUserRepository` implementa a mesma interface `IUserRepository`, provando que a DI por contrato funciona na prática.
+
+Para validar o fluxo HTTP completo (rotas, validação de DTOs e persistência real), utilize os **testes de integração** descritos na seção [Testes](#testes).
 
 ### Adicionando uma nova funcionalidade
 
