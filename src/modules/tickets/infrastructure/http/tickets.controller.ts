@@ -11,8 +11,8 @@ import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get
 export class TicketsController {
   constructor(
     private readonly createTicketUseCase: CreateTicketUseCase,
-    private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
     private readonly getTicketsUseCase: GetTicketsUseCase,
+    private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
   ) {}
 
   @ApiRoute({

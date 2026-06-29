@@ -13,8 +13,8 @@ export function makeTicketsController(): TicketsController {
 
   const controller = new TicketsController(
     new CreateTicketUseCase(ticketRepository, ticketClassifier),
-    new GetTicketByIdUseCase(ticketRepository),
     new GetTicketsUseCase(ticketRepository),
+    new GetTicketByIdUseCase(ticketRepository),
   );
 
   ControllerRegistry.register(controller);
