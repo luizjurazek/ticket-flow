@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { makeTicketsController } from './factories/tickets.controller.factory';
-import { validateDto } from '@/shared/infra/http/middlewares/validation.middleware';
+import { validateDto, validateRequest } from '@/shared/infra/http/middlewares/validation.middleware';
 import { CreateTicketInputDTO } from './dtos/create-ticket-input.dto';
 import { IdParamDTO } from '@/shared/infra/http/dtos/id-param.dto';
+import { UpdateTicketStatusInputDTO } from './dtos/update-ticket-status-input.dto';
 
 const ticketsRoutes = Router();
 const ticketsController = makeTicketsController();
@@ -12,6 +13,11 @@ ticketsRoutes.get('/', (req, res) => ticketsController.findAll(req, res));
 ticketsRoutes.get('/:id', validateDto(IdParamDTO, 'params'), (req, res) => ticketsController.getById(req, res));
 ticketsRoutes.get('/user/:id', validateDto(IdParamDTO, 'params'), (req, res) =>
   ticketsController.getByUserId(req, res),
+);
+ticketsRoutes.put(
+  '/:id/status',
+  validateRequest({ params: IdParamDTO, body: UpdateTicketStatusInputDTO }),
+  (req, res) => ticketsController.updateStatus(req, res),
 );
 
 export { ticketsRoutes };

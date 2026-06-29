@@ -7,6 +7,7 @@ import { ControllerRegistry } from '@/shared/infra/swagger/registry/controller.r
 import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-by-id/get-ticket-by-id.usecase';
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
+import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
 
 export function makeTicketsController(): TicketsController {
   const ticketRepository = new PrismaTicketsRepository(prisma);
@@ -17,6 +18,7 @@ export function makeTicketsController(): TicketsController {
     new GetTicketsUseCase(ticketRepository),
     new GetTicketByIdUseCase(ticketRepository),
     new GetTicketsByUserUseCase(ticketRepository),
+    new UpdateTicketStatusUseCase(ticketRepository),
   );
 
   ControllerRegistry.register(controller);

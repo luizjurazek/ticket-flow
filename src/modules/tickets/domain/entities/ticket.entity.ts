@@ -46,4 +46,9 @@ export class Ticket {
   static create(data: ICreateTicketData): Ticket {
     return new Ticket(data);
   }
+
+  updateStatus(status: TicketStatus): void {
+    this.status = status;
+    this.updatedAt = new Date();
+  }
 }

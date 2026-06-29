@@ -7,6 +7,7 @@ import { TicketOutputDTO } from '@/modules/tickets/application/dtos/ticket-outpu
 import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-by-id/get-ticket-by-id.usecase';
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
+import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
 
 @ApiTags('Tickets')
 export class TicketsController {
@@ -15,6 +16,7 @@ export class TicketsController {
     private readonly getTicketsUseCase: GetTicketsUseCase,
     private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
     private readonly getTicketsByUserUseCase: GetTicketsByUserUseCase,
+    private readonly updateTicketStatusUseCase: UpdateTicketStatusUseCase,
   ) {}
 
   @ApiRoute({
@@ -110,5 +112,31 @@ export class TicketsController {
   async getByUserId(req: Request, res: Response): Promise<Response | void> {
     const tickets = await this.getTicketsByUserUseCase.execute(req.params.userId as string);
     return res.status(HttpStatus.OK).json(tickets);
+  }
+
+  @ApiRoute({
+    method: 'put',
+    path: '/tickets/{id}/status',
+  })
+  @ApiOperation({
+    summary: 'Update ticket status',
+    description: 'Updates a ticket status by their ID',
+  })
+  @ApiResponse({
+    statusCode: HttpStatus.OK,
+    description: 'Ticket status updated successfully',
+    type: TicketOutputDTO,
+  })
+  @ApiParams({
+    name: 'id',
+    in: 'path',
+    description: 'Ticket ID',
+    required: true,
+    type: 'string',
+  })
+  async updateStatus(req: Request, res: Response): Promise<Response | void> {
+    const { status } = req.body;
+    const ticket = await this.updateTicketStatusUseCase.execute(req.params.id as string, status);
+    return res.status(HttpStatus.OK).json(ticket);
   }
 }
