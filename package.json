@@ -12,7 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:integration": "jest -c jest.integration.config.js --passWithNoTests"
+    "test:integration": "jest -c jest.integration.config.js --passWithNoTests --detectOpenHandles"
   },
   "repository": {
     "type": "git",
