@@ -177,10 +177,10 @@ src/
 
 ### Camadas (módulo `users`)
 
-| Camada | Pasta | Responsabilidade |
-| ------ | ----- | ---------------- |
-| **Domain** | `domain/` | Entidades ricas, regras de negócio e contratos de repositório |
-| **Application** | `application/` | Casos de uso — orquestram o domínio sem conhecer infraestrutura |
+| Camada             | Pasta             | Responsabilidade                                                 |
+| ------------------ | ----------------- | ---------------------------------------------------------------- |
+| **Domain**         | `domain/`         | Entidades ricas, regras de negócio e contratos de repositório    |
+| **Application**    | `application/`    | Casos de uso — orquestram o domínio sem conhecer infraestrutura  |
 | **Infrastructure** | `infrastructure/` | Adapters: Prisma, controllers, rotas, DTOs de entrada, factories |
 
 A regra de dependência é unidirecional: **Infrastructure → Application → Domain**. O domínio nunca importa Prisma, Express ou qualquer detalhe externo.
@@ -254,7 +254,11 @@ export class PrismaUserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async create(user: User): Promise<User> {
-    const createdUser = await this.prisma.user.create({ data: { /* ... */ } });
+    const createdUser = await this.prisma.user.create({
+      data: {
+        /* ... */
+      },
+    });
     return new User(createdUser);
   }
 }
@@ -353,13 +357,13 @@ A aplicação utiliza **Winston** encapsulado em `StructuredLogger` para registr
 
 ### Níveis de log
 
-| Nível | Uso |
-| ----- | --- |
-| `error` | Falhas e exceções |
-| `warn` | Situações inesperadas que não interrompem o fluxo |
-| `info` | Eventos gerais (ex.: servidor iniciado) |
-| `http` | Requisições HTTP concluídas |
-| `debug` | Detalhes para desenvolvimento |
+| Nível   | Uso                                               |
+| ------- | ------------------------------------------------- |
+| `error` | Falhas e exceções                                 |
+| `warn`  | Situações inesperadas que não interrompem o fluxo |
+| `info`  | Eventos gerais (ex.: servidor iniciado)           |
+| `http`  | Requisições HTTP concluídas                       |
+| `debug` | Detalhes para desenvolvimento                     |
 
 O nível ativo é definido pela variável `LOG_LEVEL` ou, na ausência dela, pelo ambiente: `debug` em development e `http` em production.
 
@@ -427,15 +431,15 @@ http://localhost:3000/docs
 
 ### Decorators disponíveis
 
-| Decorator | Escopo | Função |
-| --------- | ------ | ------ |
-| `@ApiTags` | Classe | Agrupa endpoints (ex.: "Users") |
-| `@ApiRoute` | Método | Define método HTTP e path |
-| `@ApiOperation` | Método | Summary e description do endpoint |
-| `@ApiResponse` | Método | Status code, descrição e tipo de retorno |
-| `@ApiBody` | Método | Schema do corpo da requisição |
-| `@ApiParams` | Método | Parâmetros de path ou query |
-| `@ApiProperty` | Propriedade (DTO) | Marca campos para o schema OpenAPI |
+| Decorator       | Escopo            | Função                                   |
+| --------------- | ----------------- | ---------------------------------------- |
+| `@ApiTags`      | Classe            | Agrupa endpoints (ex.: "Users")          |
+| `@ApiRoute`     | Método            | Define método HTTP e path                |
+| `@ApiOperation` | Método            | Summary e description do endpoint        |
+| `@ApiResponse`  | Método            | Status code, descrição e tipo de retorno |
+| `@ApiBody`      | Método            | Schema do corpo da requisição            |
+| `@ApiParams`    | Método            | Parâmetros de path ou query              |
+| `@ApiProperty`  | Propriedade (DTO) | Marca campos para o schema OpenAPI       |
 
 ### Exemplo no módulo `users`
 
