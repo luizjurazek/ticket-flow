@@ -62,9 +62,4 @@ export class PrismaUserRepository implements IUserRepository {
       where: { id },
     });
   }
-
-  async hasTickets(id: string): Promise<boolean> {
-    const count = await this.prisma.ticket.count({ where: { userId: id } });
-    return count > 0;
-  }
 }
