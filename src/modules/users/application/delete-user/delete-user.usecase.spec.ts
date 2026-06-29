@@ -1,15 +1,21 @@
 import { DeleteUserUseCase } from './delete-user.usecase';
 import { InMemoryUserRepository } from '@/modules/users/domain/repositories/fakes/in-memory-user.repository';
+import { UserTicketCheckerAdapter } from '@/modules/users/infrastructure/adapters/user-ticket-checker.adapter';
+import { InMemoryTicketRepository } from '@/modules/tickets/domain/repositories/fakes/in-memory-ticket.repository';
 import { HttpStatus } from '@/shared/http/http-status';
 import { createUser } from '@/test/helpers/user.factory';
+import { createTicket } from '@/test/helpers/ticket.factory';
 
 describe('DeleteUserUseCase', () => {
   let userRepository: InMemoryUserRepository;
+  let ticketRepository: InMemoryTicketRepository;
   let deleteUserUseCase: DeleteUserUseCase;
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
-    deleteUserUseCase = new DeleteUserUseCase(userRepository);
+    ticketRepository = new InMemoryTicketRepository();
+    const userTicketChecker = new UserTicketCheckerAdapter(ticketRepository);
+    deleteUserUseCase = new DeleteUserUseCase(userRepository, userTicketChecker);
   });
 
   it('should delete a user successfully', async () => {
@@ -29,7 +35,7 @@ describe('DeleteUserUseCase', () => {
 
   it('should throw error when user has associated tickets', async () => {
     const user = await createUser(userRepository);
-    userRepository.markUserWithTickets(user.id);
+    await createTicket(ticketRepository, { userId: user.id });
 
     await expect(deleteUserUseCase.execute(user.id)).rejects.toMatchObject({
       message: 'User has associated tickets and cannot be deleted',

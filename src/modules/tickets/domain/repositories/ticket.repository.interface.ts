@@ -8,4 +8,5 @@ export interface ITicketRepository {
   findAll(): Promise<Ticket[]>;
   updateStatus(id: string, status: TicketStatus): Promise<Ticket>;
   delete(id: string): Promise<void>;
+  existsByUserId(userId: string): Promise<boolean>;
 }

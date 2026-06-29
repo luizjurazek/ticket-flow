@@ -36,4 +36,8 @@ export class InMemoryTicketRepository implements ITicketRepository {
   async delete(id: string): Promise<void> {
     this.tickets = this.tickets.filter((ticket) => ticket.id !== id);
   }
+
+  async existsByUserId(userId: string): Promise<boolean> {
+    return this.tickets.some((ticket) => ticket.userId === userId);
+  }
 }
