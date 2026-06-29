@@ -1,0 +1,278 @@
+{
+  "info": {
+    "name": "Ticket Flow API",
+    "description": "Coleção da API Ticket Flow.\n\n**Fluxo sugerido:** Users → Create user → Create ticket → demais requests.\n\nVariáveis `userId` e `ticketId` são preenchidas automaticamente após Create user e Create ticket.\n\nSwagger: {{baseUrl}}/docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "ticketId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('userId', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\"\n}"
+            },
+            "url": "{{baseUrl}}/users",
+            "description": "Cria um novo usuário. Retorna 201 com o user criado."
+          },
+          "response": []
+        },
+        {
+          "name": "List all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users",
+            "description": "Lista todos os usuários."
+          },
+          "response": []
+        },
+        {
+          "name": "Get user by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{userId}}",
+            "description": "Busca usuário pelo ID (usa variável `userId`)."
+          },
+          "response": []
+        },
+        {
+          "name": "Update user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva Atualizado\",\n  \"email\": \"joao.atualizado@example.com\"\n}"
+            },
+            "url": "{{baseUrl}}/users/{{userId}}",
+            "description": "Atualiza nome e/ou email. Pelo menos um campo é obrigatório.\n\n**Campos (strings):**\n- `name` — string, mínimo 3 caracteres (opcional)\n- `email` — string, formato de email válido (opcional)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{userId}}",
+            "description": "Remove o usuário. Retorna 409 se houver tickets associados."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tickets",
+      "description": "POST /tickets possui rate limit (TICKET_CREATE_RATE_LIMIT_* no .env).",
+      "item": [
+        {
+          "name": "Create ticket",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('ticketId', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"message\": \"Não consigo acessar minha conta.\"\n}"
+            },
+            "url": "{{baseUrl}}/tickets",
+            "description": "Cria ticket e classifica via IA. Requer `userId` existente."
+          },
+          "response": []
+        },
+        {
+          "name": "List all tickets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/tickets",
+            "description": "Lista todos os tickets."
+          },
+          "response": []
+        },
+        {
+          "name": "Get ticket by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/tickets/{{ticketId}}",
+            "description": "Busca ticket pelo ID (usa variável `ticketId`)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get tickets by user id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/tickets/user/{{userId}}",
+            "description": "Lista tickets de um usuário."
+          },
+          "response": []
+        },
+        {
+          "name": "Update ticket status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": "{{baseUrl}}/tickets/{{ticketId}}/status",
+            "description": "Atualiza status do ticket.\n\n**Campo (string):**\n- `status` — obrigatório; valores aceitos: `open`, `closed`, `in_progress`"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error examples",
+      "item": [
+        {
+          "name": "404 — user not found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/00000000-0000-4000-8000-000000000000",
+            "description": "Usuário inexistente."
+          },
+          "response": []
+        },
+        {
+          "name": "404 — create ticket with non-existent user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"00000000-0000-4000-8000-000000000000\",\n  \"message\": \"Mensagem de teste\"\n}"
+            },
+            "url": "{{baseUrl}}/tickets",
+            "description": "Tenta criar ticket para user que não existe."
+          },
+          "response": []
+        },
+        {
+          "name": "400 — invalid email on create user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"email-invalido\"\n}"
+            },
+            "url": "{{baseUrl}}/users",
+            "description": "Email inválido na criação de usuário."
+          },
+          "response": []
+        },
+        {
+          "name": "409 — delete user with associated tickets",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{userId}}",
+            "description": "Execute Create user + Create ticket antes. Depois tente deletar o user."
+          },
+          "response": []
+        },
+        {
+          "name": "429 — rate limit on POST /tickets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"message\": \"Requisição extra para testar rate limit\"\n}"
+            },
+            "url": "{{baseUrl}}/tickets",
+            "description": "Envie mais requisições que TICKET_CREATE_RATE_LIMIT_MAX dentro da janela configurada."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

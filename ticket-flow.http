@@ -1,0 +1,142 @@
+### Ticket Flow API
+### Use with REST Client (VS Code / Cursor) or IntelliJ HTTP Client
+### Docs: GET {{baseUrl}}/docs
+
+@baseUrl = http://localhost:3000
+
+### ─────────────────────────────────────────────────────────────
+### Users
+### ─────────────────────────────────────────────────────────────
+
+### Create user
+# @name createUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao.silva@example.com"
+}
+
+###
+
+@userId = {{createUser.response.body.id}}
+
+### List all users
+GET {{baseUrl}}/users
+
+###
+
+### Get user by id
+GET {{baseUrl}}/users/{{userId}}
+
+###
+
+### Update user (name and/or email — at least one field)
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "João Silva Atualizado",
+  "email": "joao.atualizado@example.com"
+}
+
+###
+
+### Delete user (409 if user has tickets)
+DELETE {{baseUrl}}/users/{{userId}}
+
+###
+
+### ─────────────────────────────────────────────────────────────
+### Tickets
+### POST /tickets has rate limit (see TICKET_CREATE_RATE_LIMIT_* in .env)
+### ─────────────────────────────────────────────────────────────
+
+### Create ticket (requires existing userId)
+# @name createTicket
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "message": "Não consigo acessar minha conta."
+}
+
+###
+
+@ticketId = {{createTicket.response.body.id}}
+
+### List all tickets
+GET {{baseUrl}}/tickets
+
+###
+
+### Get ticket by id
+GET {{baseUrl}}/tickets/{{ticketId}}
+
+###
+
+### Get tickets by user id
+GET {{baseUrl}}/tickets/user/{{userId}}
+
+###
+
+### Update ticket status
+# Valid status: open | closed | in_progress
+PUT {{baseUrl}}/tickets/{{ticketId}}/status
+Content-Type: application/json
+
+{
+  "status": "in_progress"
+}
+
+###
+
+### ─────────────────────────────────────────────────────────────
+### Error examples
+### ─────────────────────────────────────────────────────────────
+
+### 404 — user not found
+GET {{baseUrl}}/users/00000000-0000-4000-8000-000000000000
+
+###
+
+### 404 — create ticket with non-existent user
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "userId": "00000000-0000-4000-8000-000000000000",
+  "message": "Mensagem de teste"
+}
+
+###
+
+### 400 — invalid email on create user
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "email-invalido"
+}
+
+###
+
+### 409 — delete user with associated tickets
+# 1) Create user and ticket first (run createUser + createTicket above)
+# 2) Then call:
+DELETE {{baseUrl}}/users/{{userId}}
+
+###
+
+### 429 — rate limit exceeded on POST /tickets
+# Send more requests than TICKET_CREATE_RATE_LIMIT_MAX within the window
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "message": "Requisição extra para testar rate limit"
+}

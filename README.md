@@ -18,14 +18,16 @@ cp .env.example .env
 
 O `.env.example` contém todos os valores padrão necessários (usuário, senha e banco PostgreSQL). **Você só precisa alterar a chave do Gemini** — os demais valores já funcionam com o Docker Compose.
 
-| Variável            | Descrição                                            |
-| ------------------- | ---------------------------------------------------- |
-| `POSTGRES_USER`     | Usuário do PostgreSQL                                |
-| `POSTGRES_PASSWORD` | Senha do PostgreSQL                                  |
-| `POSTGRES_DB`       | Nome do banco de dados                               |
-| `DATABASE_URL`      | URL de conexão com o PostgreSQL                      |
-| `GEMINI_API_KEY`    | Chave de API do Google Gemini (**obrigatória**)      |
-| `NODE_ENV`          | Ambiente de execução (`development` ou `production`) |
+| Variável                            | Descrição                                                       |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `POSTGRES_USER`                     | Usuário do PostgreSQL                                           |
+| `POSTGRES_PASSWORD`                 | Senha do PostgreSQL                                             |
+| `POSTGRES_DB`                       | Nome do banco de dados                                          |
+| `DATABASE_URL`                      | URL de conexão com o PostgreSQL                                 |
+| `GEMINI_API_KEY`                    | Chave de API do Google Gemini (**obrigatória**)                 |
+| `NODE_ENV`                          | Ambiente de execução (`development` ou `production`)          |
+| `TICKET_CREATE_RATE_LIMIT_MAX`      | Máximo de `POST /tickets` por janela (padrão: `10`)             |
+| `TICKET_CREATE_RATE_LIMIT_WINDOW_MS`| Janela do rate limit em ms (padrão: `30000` local / `60000` .env.example) |
 
 > **Importante:** a integração com o Gemini é essencial para o funcionamento do projeto. Sem uma `GEMINI_API_KEY` válida, as funcionalidades que dependem de IA não vão operar.
 
@@ -122,13 +124,306 @@ A API ficará disponível em `http://localhost:3000`.
 
 ### Documentação da API
 
-Com a aplicação rodando, todas as rotas disponíveis podem ser consultadas em:
+Com a aplicação rodando, a documentação interativa (Swagger) fica em:
 
 **http://localhost:3000/docs**
 
-Lá você encontra a documentação interativa com os endpoints, payloads e respostas esperadas.
+Para testar as rotas manualmente, use também:
 
-## Testes
+- [`ticket-flow.http`](ticket-flow.http) — REST Client (VS Code / Cursor)
+- [`ticket-flow.postman_collection.json`](ticket-flow.postman_collection.json) — importar no Postman
+
+---
+
+## Referência da API
+
+**Base URL:** `http://localhost:3000`
+
+Todas as requisições com corpo devem enviar `Content-Type: application/json`.
+
+### Formato de erro
+
+Erros de negócio e validação retornam JSON no formato:
+
+```json
+{
+  "status": "error",
+  "message": "Descrição do erro"
+}
+```
+
+Erros de validação de DTO incluem também o campo `errors`:
+
+```json
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": [
+    { "field": "email", "source": "body", "message": "Invalid email address" }
+  ]
+}
+```
+
+### Fluxo recomendado
+
+1. Criar um **usuário** (`POST /users`)
+2. Criar um **ticket** com o `userId` retornado (`POST /tickets`) — a IA classifica canal e prioridade
+3. Consultar ou atualizar tickets conforme necessário
+
+---
+
+### Users
+
+#### `POST /users` — Criar usuário
+
+Cria um novo usuário.
+
+| Item        | Valor              |
+| ----------- | ------------------ |
+| **Status**  | `201 Created`      |
+
+**Body:**
+
+```json
+{
+  "name": "João Silva",
+  "email": "joao.silva@example.com"
+}
+```
+
+| Campo   | Tipo   | Obrigatório | Regras                          |
+| ------- | ------ | ----------- | ------------------------------- |
+| `name`  | string | sim         | mínimo 3 caracteres             |
+| `email` | string | sim         | email válido, único no banco    |
+
+**Resposta (`201`):**
+
+```json
+{
+  "id": "uuid",
+  "name": "João Silva",
+  "email": "joao.silva@example.com",
+  "createdAt": "2026-06-29T12:00:00.000Z",
+  "updatedAt": "2026-06-29T12:00:00.000Z"
+}
+```
+
+**Erros comuns:** `400` — email inválido ou já cadastrado.
+
+---
+
+#### `GET /users` — Listar usuários
+
+Retorna todos os usuários cadastrados.
+
+| Item       | Valor         |
+| ---------- | ------------- |
+| **Status** | `200 OK`      |
+| **Body**   | não enviar    |
+
+**Resposta (`200`):** array de usuários (mesmo formato do `POST`).
+
+---
+
+#### `GET /users/:id` — Buscar usuário por ID
+
+| Item       | Valor                    |
+| ---------- | ------------------------ |
+| **Status** | `200 OK`                 |
+| **Params** | `id` — UUID do usuário   |
+
+**Resposta (`200`):** objeto usuário.
+
+**Erros comuns:** `404` — usuário não encontrado.
+
+---
+
+#### `PUT /users/:id` — Atualizar usuário
+
+Atualiza nome e/ou email. Pelo menos um campo deve ser enviado.
+
+| Item       | Valor                  |
+| ---------- | ---------------------- |
+| **Status** | `200 OK`               |
+| **Params** | `id` — UUID do usuário |
+
+**Body (pelo menos um campo):**
+
+```json
+{
+  "name": "João Silva Atualizado",
+  "email": "joao.novo@example.com"
+}
+```
+
+| Campo   | Tipo   | Obrigatório | Regras              |
+| ------- | ------ | ----------- | ------------------- |
+| `name`  | string | não         | mínimo 3 caracteres |
+| `email` | string | não         | email válido        |
+
+**Resposta (`200`):** usuário atualizado.
+
+**Erros comuns:** `404` — usuário não encontrado; `400` — email inválido ou já em uso.
+
+---
+
+#### `DELETE /users/:id` — Remover usuário
+
+| Item       | Valor                  |
+| ---------- | ---------------------- |
+| **Status** | `204 No Content`       |
+| **Params** | `id` — UUID do usuário |
+| **Body**   | não enviar             |
+
+**Resposta (`204`):** corpo vazio.
+
+**Erros comuns:**
+
+- `404` — usuário não encontrado
+- `409` — usuário possui tickets associados (delete bloqueado)
+
+---
+
+### Tickets
+
+> **Rate limit:** `POST /tickets` é limitado por IP. Configure via `TICKET_CREATE_RATE_LIMIT_MAX` e `TICKET_CREATE_RATE_LIMIT_WINDOW_MS`. Ao exceder o limite, a API retorna `429 Too Many Requests`.
+
+#### `POST /tickets` — Criar ticket
+
+Cria um ticket e classifica automaticamente via Gemini (canal, prioridade e flag `manuallyReview`).
+
+| Item       | Valor         |
+| ---------- | ------------- |
+| **Status** | `201 Created` |
+
+**Body:**
+
+```json
+{
+  "userId": "uuid-do-usuario",
+  "message": "Não consigo acessar minha conta."
+}
+```
+
+| Campo     | Tipo   | Obrigatório | Regras                          |
+| --------- | ------ | ----------- | ------------------------------- |
+| `userId`  | string | sim         | UUID v4 de usuário existente    |
+| `message` | string | sim         | máximo 2000 caracteres          |
+
+**Resposta (`201`):**
+
+```json
+{
+  "id": "uuid",
+  "userId": "uuid-do-usuario",
+  "message": "Não consigo acessar minha conta.",
+  "channel": "technical_support",
+  "priority": "high",
+  "status": "open",
+  "manuallyReview": false,
+  "reviewedBy": null,
+  "reviewedAt": null,
+  "createdAt": "2026-06-29T12:00:00.000Z",
+  "updatedAt": "2026-06-29T12:00:00.000Z"
+}
+```
+
+**Valores possíveis de classificação:**
+
+| Campo            | Valores                                                                 |
+| ---------------- | ----------------------------------------------------------------------- |
+| `channel`        | `ombudsman`, `customer_service`, `technical_support`, `finance`, `out_of_scope` |
+| `priority`       | `low`, `medium`, `high`                                                 |
+| `status` inicial | sempre `open`                                                           |
+
+**Erros comuns:**
+
+- `400` — `userId` inválido ou `message` vazio/grande demais
+- `404` — usuário não encontrado (IA **não** é chamada)
+- `429` — rate limit excedido
+- `500` — falha na API Gemini (fallback rule-based pode ser acionado internamente)
+
+---
+
+#### `GET /tickets` — Listar tickets
+
+| Item       | Valor      |
+| ---------- | ---------- |
+| **Status** | `200 OK`   |
+| **Body**   | não enviar |
+
+**Resposta (`200`):** array de tickets (formato do `POST /tickets`).
+
+---
+
+#### `GET /tickets/:id` — Buscar ticket por ID
+
+| Item       | Valor                    |
+| ---------- | ------------------------ |
+| **Status** | `200 OK`                 |
+| **Params** | `id` — UUID do ticket    |
+
+**Resposta (`200`):** objeto ticket.
+
+**Erros comuns:** `404` — ticket não encontrado.
+
+---
+
+#### `GET /tickets/user/:id` — Listar tickets de um usuário
+
+| Item       | Valor                              |
+| ---------- | ---------------------------------- |
+| **Status** | `200 OK`                           |
+| **Params** | `id` — UUID do usuário (no path)   |
+
+**Resposta (`200`):** array de tickets do usuário. Retorna `[]` se o usuário não tiver tickets (não valida se o usuário existe).
+
+**Exemplo:** `GET /tickets/user/550e8400-e29b-41d4-a716-446655440000`
+
+---
+
+#### `PUT /tickets/:id/status` — Atualizar status do ticket
+
+| Item       | Valor                  |
+| ---------- | ---------------------- |
+| **Status** | `200 OK`               |
+| **Params** | `id` — UUID do ticket  |
+
+**Body:**
+
+```json
+{
+  "status": "in_progress"
+}
+```
+
+| Campo    | Tipo   | Obrigatório | Valores válidos                    |
+| -------- | ------ | ----------- | ---------------------------------- |
+| `status` | string | sim         | `open`, `closed`, `in_progress`    |
+
+**Resposta (`200`):** ticket com status atualizado.
+
+**Erros comuns:** `404` — ticket não encontrado; `400` — status inválido.
+
+---
+
+### Resumo das rotas
+
+| Método   | Rota                    | Descrição                    |
+| -------- | ----------------------- | ---------------------------- |
+| `POST`   | `/users`                | Criar usuário                |
+| `GET`    | `/users`                | Listar usuários              |
+| `GET`    | `/users/:id`            | Buscar usuário               |
+| `PUT`    | `/users/:id`            | Atualizar usuário            |
+| `DELETE` | `/users/:id`            | Remover usuário              |
+| `POST`   | `/tickets`              | Criar ticket (com IA)        |
+| `GET`    | `/tickets`              | Listar tickets               |
+| `GET`    | `/tickets/:id`          | Buscar ticket                |
+| `GET`    | `/tickets/user/:id`     | Tickets por usuário          |
+| `PUT`    | `/tickets/:id/status`   | Atualizar status do ticket   |
+| `GET`    | `/docs`                 | Documentação Swagger (UI)    |
+
+---
 
 O projeto utiliza **Jest** com dois tipos de teste:
 
