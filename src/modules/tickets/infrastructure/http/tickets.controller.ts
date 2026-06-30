@@ -8,6 +8,7 @@ import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-b
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
 import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
+import { DeleteTicketUseCase } from '@/modules/tickets/application/delete-ticket/delete-ticket.usecase';
 import { UpdateTicketStatusInputDTO } from './dtos/update-ticket-status-input.dto';
 
 @ApiTags('Tickets')
@@ -18,6 +19,7 @@ export class TicketsController {
     private readonly getTicketByIdUseCase: GetTicketByIdUseCase,
     private readonly getTicketsByUserUseCase: GetTicketsByUserUseCase,
     private readonly updateTicketStatusUseCase: UpdateTicketStatusUseCase,
+    private readonly deleteTicketUseCase: DeleteTicketUseCase,
   ) {}
 
   @ApiRoute({
@@ -142,5 +144,29 @@ export class TicketsController {
     const { status } = req.body;
     const ticket = await this.updateTicketStatusUseCase.execute(req.params.id as string, status);
     return res.status(HttpStatus.OK).json(ticket);
+  }
+
+  @ApiRoute({
+    method: 'delete',
+    path: '/tickets/{id}',
+  })
+  @ApiOperation({
+    summary: 'Delete a ticket',
+    description: 'Deletes a ticket by their ID',
+  })
+  @ApiResponse({
+    statusCode: HttpStatus.NO_CONTENT,
+    description: 'Ticket deleted successfully',
+  })
+  @ApiParams({
+    name: 'id',
+    in: 'path',
+    description: 'Ticket ID',
+    required: true,
+    type: 'string',
+  })
+  async delete(req: Request, res: Response): Promise<Response | void> {
+    await this.deleteTicketUseCase.execute(req.params.id as string);
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
 }

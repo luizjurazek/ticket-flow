@@ -227,4 +227,31 @@ describe('Tickets API (integration)', () => {
       );
     });
   });
+
+  describe('DELETE /tickets/:id', () => {
+    it('should delete the ticket and return 204', async () => {
+      const userId = await createUserId();
+      const created = await createTicketViaApi(userId);
+
+      await request(app).delete(`/tickets/${created.id}`).expect(HttpStatus.NO_CONTENT);
+
+      const ticketInDb = await prisma.ticket.findUnique({ where: { id: created.id } });
+      expect(ticketInDb).toBeNull();
+    });
+
+    it('should return 404 when ticket does not exist', async () => {
+      const response = await request(app).delete(`/tickets/${faker.string.uuid()}`).expect(HttpStatus.NOT_FOUND);
+
+      expect(response.body.status).toBe('error');
+      expect(response.body.message).toBe('Ticket not found');
+    });
+
+    it('should allow deleting a ticket so the user can be deleted afterwards', async () => {
+      const userId = await createUserId();
+      const created = await createTicketViaApi(userId);
+
+      await request(app).delete(`/tickets/${created.id}`).expect(HttpStatus.NO_CONTENT);
+      await request(app).delete(`/users/${userId}`).expect(HttpStatus.NO_CONTENT);
+    });
+  });
 });

@@ -189,6 +189,16 @@
             "description": "Atualiza status do ticket.\n\n**Campo (string):**\n- `status` — obrigatório; valores aceitos: `open`, `closed`, `in_progress`"
           },
           "response": []
+        },
+        {
+          "name": "Delete ticket",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/tickets/{{ticketId}}",
+            "description": "Remove o ticket. Retorna 204 em sucesso ou 404 se não existir."
+          },
+          "response": []
         }
       ]
     },

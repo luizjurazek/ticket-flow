@@ -22,5 +22,6 @@ ticketsRoutes.put(
   validateRequest({ params: IdParamDTO, body: UpdateTicketStatusInputDTO }),
   (req, res) => ticketsController.updateStatus(req, res),
 );
+ticketsRoutes.delete('/:id', validateDto(IdParamDTO, 'params'), (req, res) => ticketsController.delete(req, res));
 
 export { ticketsRoutes };

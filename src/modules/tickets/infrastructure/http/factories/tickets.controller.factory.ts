@@ -8,6 +8,7 @@ import { GetTicketByIdUseCase } from '@/modules/tickets/application/get-ticket-b
 import { GetTicketsUseCase } from '@/modules/tickets/application/get-tickets/get-tickets.usecase';
 import { GetTicketsByUserUseCase } from '@/modules/tickets/application/get-tickets-by-user/get-tickets-by-user.usecase';
 import { UpdateTicketStatusUseCase } from '@/modules/tickets/application/update-ticket-status/update-ticket-status.usecase';
+import { DeleteTicketUseCase } from '@/modules/tickets/application/delete-ticket/delete-ticket.usecase';
 import { PrismaUserRepository } from '@/modules/users/infrastructure/prisma/prisma-users.repository';
 import { UserLookupAdapter } from '@/modules/tickets/infrastructure/adapters/user-lookup.adapter';
 
@@ -24,6 +25,7 @@ export function makeTicketsController(): TicketsController {
     new GetTicketByIdUseCase(ticketRepository),
     new GetTicketsByUserUseCase(ticketRepository),
     new UpdateTicketStatusUseCase(ticketRepository),
+    new DeleteTicketUseCase(ticketRepository),
   );
 
   ControllerRegistry.register(controller);

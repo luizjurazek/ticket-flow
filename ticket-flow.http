@@ -93,6 +93,11 @@ Content-Type: application/json
 
 ###
 
+### Delete ticket
+DELETE {{baseUrl}}/tickets/{{ticketId}}
+
+###
+
 ### ─────────────────────────────────────────────────────────────
 ### Error examples
 ### ─────────────────────────────────────────────────────────────
